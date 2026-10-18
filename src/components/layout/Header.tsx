@@ -8,6 +8,7 @@ interface HeaderProps {
   onOpenNewLead?: () => void;
   selectedLocation: string;
   onLocationChange: (loc: string) => void;
+  locations?: Array<{ id: string; name: string }>;
 }
 
 export function Header({
@@ -15,6 +16,7 @@ export function Header({
   onOpenNewLead,
   selectedLocation,
   onLocationChange,
+  locations = [],
 }: HeaderProps) {
   return (
     <header className="h-16 bg-white border-b border-[#E5E7EB] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
@@ -41,9 +43,11 @@ export function Header({
             className="bg-transparent font-medium text-[#1E2922] focus:outline-hidden cursor-pointer"
           >
             <option value="All">All Locations (Network)</option>
-            <option value="Downtown Hub">Downtown Hub</option>
-            <option value="Westside Commons">Westside Commons</option>
-            <option value="Tech District">Tech District</option>
+            {locations.map((loc) => (
+              <option key={loc.id} value={loc.name}>
+                {loc.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>

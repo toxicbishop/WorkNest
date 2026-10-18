@@ -57,3 +57,52 @@ export interface DashboardMetrics {
     mrr: string;
   };
 }
+
+export interface Location {
+  id: string;
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  timezone: string;
+  operatingHours: string;
+  totalCapacity: number;
+  currentOccupancyRate: number; // percentage, e.g. 84
+  phone: string;
+  managerName: string;
+  status: "Active" | "Maintenance" | "Coming Soon";
+}
+
+export interface OrganizationSettings {
+  name: string;
+  supportEmail: string;
+  defaultCurrency: string;
+  primaryTimezone: string;
+  taxId?: string;
+  websiteUrl: string;
+  autoAssignLeads: boolean;
+  leadResponseGoalHours: number;
+}
+
+export interface MembershipPlan {
+  id: string;
+  name: string;
+  code: "Hot Desk" | "Dedicated Desk" | "Private Office" | "Virtual Office" | "Enterprise Suite";
+  monthlyRateCents: number;
+  currency: string;
+  meetingRoomCreditsHours: number;
+  printingCreditsPages: number;
+  includedLocations: string[]; // ["All"] or specific location IDs
+  description: string;
+  isActive: boolean;
+}
+
+export interface StaffMember {
+  id: string;
+  name: string;
+  email: string;
+  role: "Workspace Owner" | "Community Manager" | "Sales Lead" | "Front Desk";
+  assignedLocations: string[]; // ["All"] or location names
+  status: "Active" | "Invited" | "Inactive";
+}

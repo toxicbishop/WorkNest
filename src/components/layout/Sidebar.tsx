@@ -72,8 +72,7 @@ const NAV_ITEMS = [
     href: "/settings",
     icon: Settings,
     phase: "Phase 2",
-    available: false,
-    badge: "Phase 2",
+    available: true,
   },
 ];
 

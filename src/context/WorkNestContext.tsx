@@ -1,11 +1,24 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
-import { Lead, Activity, DashboardMetrics, LeadStatus } from "@/types";
+import {
+  Lead,
+  Activity,
+  DashboardMetrics,
+  LeadStatus,
+  Location,
+  OrganizationSettings,
+  MembershipPlan,
+  StaffMember,
+} from "@/types";
 import {
   INITIAL_LEADS,
   INITIAL_ACTIVITIES,
   INITIAL_METRICS,
+  INITIAL_LOCATIONS,
+  INITIAL_ORGANIZATION,
+  INITIAL_MEMBERSHIP_PLANS,
+  INITIAL_STAFF,
 } from "@/lib/mock-data";
 
 export type NewLeadData = Omit<Lead, "id" | "createdAt" | "updatedAt"> & { id?: string };
@@ -14,6 +27,10 @@ interface WorkNestContextType {
   leads: Lead[];
   activities: Activity[];
   metrics: DashboardMetrics;
+  locations: Location[];
+  organization: OrganizationSettings;
+  plans: MembershipPlan[];
+  staff: StaffMember[];
   selectedLocation: string;
   setSelectedLocation: (loc: string) => void;
   addLead: (lead: NewLeadData) => void;
@@ -22,51 +39,82 @@ interface WorkNestContextType {
   updateLeadStatus: (leadId: string, status: LeadStatus, reason?: string) => void;
   convertLead: (leadId: string, plan: Lead["interestedPlan"], startDate: string) => void;
   toggleActivityComplete: (activityId: string) => void;
+  // Phase 2 Settings methods
+  updateOrganization: (settings: Partial<OrganizationSettings>) => void;
+  addLocation: (location: Omit<Location, "id">) => void;
+  updateLocation: (location: Location) => void;
+  deleteLocation: (locationId: string) => void;
+  togglePlanActive: (planId: string) => void;
+  updatePlan: (plan: MembershipPlan) => void;
+  addStaffMember: (member: Omit<StaffMember, "id">) => void;
+  updateStaffMember: (member: StaffMember) => void;
+  deleteStaffMember: (staffId: string) => void;
 }
 
 const WorkNestContext = createContext<WorkNestContextType | undefined>(undefined);
 
 const STORAGE_KEY_LEADS = "worknest_leads_v1";
 const STORAGE_KEY_ACTIVITIES = "worknest_activities_v1";
-
-function getInitialLeads(): Lead[] {
-  if (typeof window !== "undefined") {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY_LEADS);
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // ignore
-    }
-  }
-  return INITIAL_LEADS;
-}
-
-function getInitialActivities(): Activity[] {
-  if (typeof window !== "undefined") {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY_ACTIVITIES);
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // ignore
-    }
-  }
-  return INITIAL_ACTIVITIES;
-}
+const STORAGE_KEY_LOCATIONS = "worknest_locations_v1";
+const STORAGE_KEY_ORG = "worknest_org_v1";
+const STORAGE_KEY_PLANS = "worknest_plans_v1";
+const STORAGE_KEY_STAFF = "worknest_staff_v1";
 
 export function WorkNestProvider({ children }: { children: React.ReactNode }) {
-  const [leads, setLeads] = useState<Lead[]>(getInitialLeads);
-  const [activities, setActivities] = useState<Activity[]>(getInitialActivities);
+  const [leads, setLeads] = useState<Lead[]>(INITIAL_LEADS);
+  const [activities, setActivities] = useState<Activity[]>(INITIAL_ACTIVITIES);
+  const [locations, setLocations] = useState<Location[]>(INITIAL_LOCATIONS);
+  const [organization, setOrganization] = useState<OrganizationSettings>(INITIAL_ORGANIZATION);
+  const [plans, setPlans] = useState<MembershipPlan[]>(INITIAL_MEMBERSHIP_PLANS);
+  const [staff, setStaff] = useState<StaffMember[]>(INITIAL_STAFF);
   const [selectedLocation, setSelectedLocation] = useState<string>("All");
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // Save changes to localStorage
+  // Load persisted state from localStorage after mount using requestAnimationFrame
   useEffect(() => {
+    const handle = requestAnimationFrame(() => {
+      try {
+        const savedLeads = localStorage.getItem(STORAGE_KEY_LEADS);
+        if (savedLeads) setLeads(JSON.parse(savedLeads));
+
+        const savedActivities = localStorage.getItem(STORAGE_KEY_ACTIVITIES);
+        if (savedActivities) setActivities(JSON.parse(savedActivities));
+
+        const savedLocations = localStorage.getItem(STORAGE_KEY_LOCATIONS);
+        if (savedLocations) setLocations(JSON.parse(savedLocations));
+
+        const savedOrg = localStorage.getItem(STORAGE_KEY_ORG);
+        if (savedOrg) setOrganization(JSON.parse(savedOrg));
+
+        const savedPlans = localStorage.getItem(STORAGE_KEY_PLANS);
+        if (savedPlans) setPlans(JSON.parse(savedPlans));
+
+        const savedStaff = localStorage.getItem(STORAGE_KEY_STAFF);
+        if (savedStaff) setStaff(JSON.parse(savedStaff));
+      } catch {
+        // ignore storage parse errors
+      } finally {
+        setIsHydrated(true);
+      }
+    });
+
+    return () => cancelAnimationFrame(handle);
+  }, []);
+
+  // Save changes to localStorage only after initial hydration has loaded
+  useEffect(() => {
+    if (!isHydrated) return;
     try {
       localStorage.setItem(STORAGE_KEY_LEADS, JSON.stringify(leads));
       localStorage.setItem(STORAGE_KEY_ACTIVITIES, JSON.stringify(activities));
+      localStorage.setItem(STORAGE_KEY_LOCATIONS, JSON.stringify(locations));
+      localStorage.setItem(STORAGE_KEY_ORG, JSON.stringify(organization));
+      localStorage.setItem(STORAGE_KEY_PLANS, JSON.stringify(plans));
+      localStorage.setItem(STORAGE_KEY_STAFF, JSON.stringify(staff));
     } catch {
       // ignore write errors
     }
-  }, [leads, activities]);
+  }, [isHydrated, leads, activities, locations, organization, plans, staff]);
 
   // Compute metrics dynamically from current persisted state (PRD FR-11)
   const metrics: DashboardMetrics = useMemo(() => {
@@ -177,12 +225,74 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
+  // Phase 2 Settings methods
+  const updateOrganization = (newSettings: Partial<OrganizationSettings>) => {
+    setOrganization((prev) => ({ ...prev, ...newSettings }));
+  };
+
+  const addLocation = (locData: Omit<Location, "id">) => {
+    const newLoc: Location = {
+      ...locData,
+      id: `loc-${Date.now()}`,
+    };
+    setLocations((prev) => [...prev, newLoc]);
+  };
+
+  const updateLocation = (updatedLoc: Location) => {
+    setLocations((prev) =>
+      prev.map((loc) => (loc.id === updatedLoc.id ? updatedLoc : loc))
+    );
+  };
+
+  const deleteLocation = (locationId: string) => {
+    setLocations((prev) => prev.filter((loc) => loc.id !== locationId));
+    // If the active location was deleted, fallback to "All"
+    setSelectedLocation((current) => {
+      const loc = locations.find((l) => l.id === locationId);
+      return loc && loc.name === current ? "All" : current;
+    });
+  };
+
+  const togglePlanActive = (planId: string) => {
+    setPlans((prev) =>
+      prev.map((p) => (p.id === planId ? { ...p, isActive: !p.isActive } : p))
+    );
+  };
+
+  const updatePlan = (updatedPlan: MembershipPlan) => {
+    setPlans((prev) =>
+      prev.map((p) => (p.id === updatedPlan.id ? updatedPlan : p))
+    );
+  };
+
+  const addStaffMember = (staffData: Omit<StaffMember, "id">) => {
+    const newMember: StaffMember = {
+      ...staffData,
+      id: `staff-${Date.now()}`,
+    };
+    setStaff((prev) => [...prev, newMember]);
+  };
+
+  const updateStaffMember = (updatedMember: StaffMember) => {
+    setStaff((prev) =>
+      prev.map((s) => (s.id === updatedMember.id ? updatedMember : s))
+    );
+  };
+
+  const deleteStaffMember = (staffId: string) => {
+    setStaff((prev) => prev.filter((s) => s.id !== staffId));
+  };
+
   return (
     <WorkNestContext.Provider
       value={{
         leads,
         activities,
         metrics,
+        locations,
+        organization,
+        plans,
+        staff,
         selectedLocation,
         setSelectedLocation,
         addLead,
@@ -191,6 +301,15 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
         updateLeadStatus,
         convertLead,
         toggleActivityComplete,
+        updateOrganization,
+        addLocation,
+        updateLocation,
+        deleteLocation,
+        togglePlanActive,
+        updatePlan,
+        addStaffMember,
+        updateStaffMember,
+        deleteStaffMember,
       }}
     >
       {children}
