@@ -191,12 +191,17 @@ export function NotificationDropdown() {
         aria-expanded={isOpen}
         title={`${activeNotifications.length} operational notifications`}
       >
-        <Bell className="w-4 h-4" />
-        {activeNotifications.length > 0 && (
-          <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-emerald-600 text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white">
-            {activeNotifications.length}
-          </span>
-        )}
+        <span className="relative inline-flex items-center justify-center">
+          <Bell className="w-5 h-5" />
+          {activeNotifications.length > 0 && (
+            <span
+              className="absolute -top-1 -right-1.5 min-w-[15px] h-[15px] px-0.5 rounded-full bg-emerald-600 text-white text-[9px] font-bold leading-none flex items-center justify-center ring-2 ring-white pointer-events-none shadow-xs"
+              aria-hidden="true"
+            >
+              {activeNotifications.length > 99 ? "99+" : activeNotifications.length}
+            </span>
+          )}
+        </span>
       </button>
 
       {/* Popover Dropdown */}
