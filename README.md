@@ -242,31 +242,6 @@ All endpoints are prefixed with `/api/v1`. Interactive OpenAPI documentation is 
 
 ---
 
-## Delivery Phases
-
-### Phase 1 — Frontend Foundation ✅
-Lead pipeline, dashboard, activities, localStorage persistence, ESLint, Vitest, strict TypeScript.
-
-### Phase 2 — Multi-Location & Settings ✅
-Location management, organization profile, team configuration, INR currency, location-scoped filtering.
-
-### Phase 3 — Members & Memberships ✅
-Member directory, subscription contracts, lead-to-member conversion, membership lifecycle.
-
-### Phase 4 — Space Inventory & Bookings ✅
-Space catalog, booking modal with real-time conflict detection, check-in/cancel workflows.
-
-### Phase 5 — Billing, Invoicing & Automation ✅
-GST-compliant invoices, payment recording, overdue detection, notification center.
-
-### Phase 6 — Authoritative FastAPI Backend ✅
-Full Python REST API replacing client-side mock data with server-enforced business rules, SQLAlchemy models, Alembic migrations, and a pytest suite (15 passing tests).
-
-### Phase 7 — Frontend Integration & Production Hardening 🔜
-Connect Next.js to the FastAPI backend via typed API client and TanStack Query. Analytics, occupancy reporting, security hardening, and deployment documentation.
-
----
-
 ## License
 
 This project is licensed under the [MIT LICENSE](LICENSE).
