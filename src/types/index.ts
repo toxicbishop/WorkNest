@@ -106,3 +106,61 @@ export interface StaffMember {
   assignedLocations: string[]; // ["All"] or location names
   status: "Active" | "Invited" | "Inactive";
 }
+
+export type MembershipStatus =
+  | "Trial"
+  | "Active"
+  | "Past Due"
+  | "Expiring"
+  | "Cancelled"
+  | "Expired";
+
+export const MEMBERSHIP_STATUSES: MembershipStatus[] = [
+  "Active",
+  "Trial",
+  "Expiring",
+  "Past Due",
+  "Cancelled",
+  "Expired",
+];
+
+export interface Membership {
+  id: string;
+  memberId: string;
+  planId: string;
+  planName: string;
+  planCode: Lead["interestedPlan"];
+  monthlyRateCents: number;
+  currency: string;
+  billingInterval: "Monthly" | "Quarterly" | "Annual";
+  status: MembershipStatus;
+  startDate: string;
+  renewalDate: string;
+  endDate?: string;
+  deskOrOfficeNumber?: string;
+  assignedLocation: string;
+  autoRenew: boolean;
+  notes?: string;
+}
+
+export interface Member {
+  id: string;
+  leadId?: string; // Originating lead if converted
+  name: string;
+  email: string;
+  phone: string;
+  company?: string;
+  title?: string;
+  homeLocation: string;
+  status: "Active" | "Past Due" | "Suspended" | "Former";
+  joinedDate: string;
+  currentMembershipId?: string;
+  avatarUrl?: string;
+  emergencyContact?: {
+    name: string;
+    phone: string;
+    relationship: string;
+  };
+  notes?: string;
+}
+

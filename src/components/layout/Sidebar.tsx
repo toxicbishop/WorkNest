@@ -40,8 +40,7 @@ const NAV_ITEMS = [
     href: "/members",
     icon: UserCheck,
     phase: "Phase 3",
-    available: false,
-    badge: "Phase 3",
+    available: true,
   },
   {
     name: "Bookings & Tours",
