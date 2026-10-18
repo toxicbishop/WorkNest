@@ -104,8 +104,8 @@ WorkNest/
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/worknest.git
-cd worknest
+git clone https://github.com/toxicbishop/WorkNest.git
+cd WorkNest
 
 # Install dependencies
 npm install
