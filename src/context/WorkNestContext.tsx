@@ -10,6 +10,9 @@ import {
   OrganizationSettings,
   MembershipPlan,
   StaffMember,
+  Member,
+  Membership,
+  MembershipStatus,
 } from "@/types";
 import {
   INITIAL_LEADS,
@@ -19,6 +22,8 @@ import {
   INITIAL_ORGANIZATION,
   INITIAL_MEMBERSHIP_PLANS,
   INITIAL_STAFF,
+  INITIAL_MEMBERS,
+  INITIAL_MEMBERSHIPS,
 } from "@/lib/mock-data";
 
 export type NewLeadData = Omit<Lead, "id" | "createdAt" | "updatedAt"> & { id?: string };
@@ -31,6 +36,8 @@ interface WorkNestContextType {
   organization: OrganizationSettings;
   plans: MembershipPlan[];
   staff: StaffMember[];
+  members: Member[];
+  memberships: Membership[];
   selectedLocation: string;
   setSelectedLocation: (loc: string) => void;
   addLead: (lead: NewLeadData) => void;
@@ -49,6 +56,12 @@ interface WorkNestContextType {
   addStaffMember: (member: Omit<StaffMember, "id">) => void;
   updateStaffMember: (member: StaffMember) => void;
   deleteStaffMember: (staffId: string) => void;
+  // Phase 3 Members & Memberships methods
+  addMember: (memberData: Omit<Member, "id" | "joinedDate">, membershipData?: Omit<Membership, "id" | "memberId">) => void;
+  updateMember: (member: Member) => void;
+  deleteMember: (memberId: string) => void;
+  updateMembershipStatus: (membershipId: string, status: MembershipStatus) => void;
+  renewMembership: (membershipId: string, nextRenewalDate: string) => void;
 }
 
 const WorkNestContext = createContext<WorkNestContextType | undefined>(undefined);
@@ -59,6 +72,8 @@ const STORAGE_KEY_LOCATIONS = "worknest_locations_v1";
 const STORAGE_KEY_ORG = "worknest_org_v1";
 const STORAGE_KEY_PLANS = "worknest_plans_v1";
 const STORAGE_KEY_STAFF = "worknest_staff_v1";
+const STORAGE_KEY_MEMBERS = "worknest_members_v1";
+const STORAGE_KEY_MEMBERSHIPS = "worknest_memberships_v1";
 
 export function WorkNestProvider({ children }: { children: React.ReactNode }) {
   const [leads, setLeads] = useState<Lead[]>(INITIAL_LEADS);
@@ -67,6 +82,8 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
   const [organization, setOrganization] = useState<OrganizationSettings>(INITIAL_ORGANIZATION);
   const [plans, setPlans] = useState<MembershipPlan[]>(INITIAL_MEMBERSHIP_PLANS);
   const [staff, setStaff] = useState<StaffMember[]>(INITIAL_STAFF);
+  const [members, setMembers] = useState<Member[]>(INITIAL_MEMBERS);
+  const [memberships, setMemberships] = useState<Membership[]>(INITIAL_MEMBERSHIPS);
   const [selectedLocation, setSelectedLocation] = useState<string>("All");
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -91,6 +108,12 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
 
         const savedStaff = localStorage.getItem(STORAGE_KEY_STAFF);
         if (savedStaff) setStaff(JSON.parse(savedStaff));
+
+        const savedMembers = localStorage.getItem(STORAGE_KEY_MEMBERS);
+        if (savedMembers) setMembers(JSON.parse(savedMembers));
+
+        const savedMemberships = localStorage.getItem(STORAGE_KEY_MEMBERSHIPS);
+        if (savedMemberships) setMemberships(JSON.parse(savedMemberships));
       } catch {
         // ignore storage parse errors
       } finally {
@@ -111,10 +134,12 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem(STORAGE_KEY_ORG, JSON.stringify(organization));
       localStorage.setItem(STORAGE_KEY_PLANS, JSON.stringify(plans));
       localStorage.setItem(STORAGE_KEY_STAFF, JSON.stringify(staff));
+      localStorage.setItem(STORAGE_KEY_MEMBERS, JSON.stringify(members));
+      localStorage.setItem(STORAGE_KEY_MEMBERSHIPS, JSON.stringify(memberships));
     } catch {
       // ignore write errors
     }
-  }, [isHydrated, leads, activities, locations, organization, plans, staff]);
+  }, [isHydrated, leads, activities, locations, organization, plans, staff, members, memberships]);
 
   // Compute metrics dynamically from current persisted state (PRD FR-11)
   const metrics: DashboardMetrics = useMemo(() => {
@@ -200,27 +225,156 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
-  const convertLead = (leadId: string, plan: Lead["interestedPlan"], startDate: string) => {
+  const convertLead = (leadId: string, planCode: Lead["interestedPlan"], startDate: string) => {
+    const targetLead = leads.find((l) => l.id === leadId);
+    if (!targetLead) return;
+
+    // 1. Mark lead as Converted
     setLeads((prev) =>
       prev.map((l) => {
         if (l.id === leadId) {
           return {
             ...l,
             status: "Converted" as LeadStatus,
-            interestedPlan: plan,
-            notes: `${l.notes ? `${l.notes}\n` : ""}Converted to member effective ${startDate}.`,
+            interestedPlan: planCode,
+            notes: `${l.notes ? `${l.notes}\n` : ""}Converted to active member effective ${startDate}.`,
             updatedAt: new Date().toISOString(),
           };
         }
         return l;
       })
     );
+
+    // 2. Prevent duplicate member creation if already converted
+    const existingMember = members.find((m) => m.leadId === leadId || m.email.toLowerCase() === targetLead.email.toLowerCase());
+    if (existingMember) return;
+
+    // 3. Match membership plan
+    const matchedPlan = plans.find((p) => p.code === planCode) || plans[0];
+    const newMemberId = `mbr-${Date.now()}`;
+    const newMembershipId = `mship-${Date.now()}`;
+
+    // Calculate initial 1-month renewal date
+    const start = new Date(startDate);
+    const renewal = new Date(start);
+    renewal.setMonth(renewal.getMonth() + 1);
+
+    const newMembership: Membership = {
+      id: newMembershipId,
+      memberId: newMemberId,
+      planId: matchedPlan ? matchedPlan.id : "plan-hotdesk",
+      planName: matchedPlan ? matchedPlan.name : `${planCode} Membership`,
+      planCode,
+      monthlyRateCents: matchedPlan ? matchedPlan.monthlyRateCents : 650000,
+      currency: "INR",
+      billingInterval: "Monthly",
+      status: "Active",
+      startDate,
+      renewalDate: renewal.toISOString().split("T")[0],
+      assignedLocation: targetLead.preferredLocation,
+      autoRenew: true,
+      notes: `Converted from lead ${targetLead.name}.`,
+    };
+
+    const newMember: Member = {
+      id: newMemberId,
+      leadId,
+      name: targetLead.name,
+      email: targetLead.email,
+      phone: targetLead.phone,
+      company: targetLead.company,
+      homeLocation: targetLead.preferredLocation,
+      status: "Active",
+      joinedDate: startDate,
+      currentMembershipId: newMembershipId,
+      notes: targetLead.notes,
+    };
+
+    setMemberships((prev) => [newMembership, ...prev]);
+    setMembers((prev) => [newMember, ...prev]);
   };
 
   const toggleActivityComplete = (activityId: string) => {
     setActivities((prev) =>
       prev.map((act) =>
         act.id === activityId ? { ...act, completed: !act.completed } : act
+      )
+    );
+  };
+
+  // Phase 3 Members & Memberships methods
+  const addMember = (
+    memberData: Omit<Member, "id" | "joinedDate">,
+    membershipData?: Omit<Membership, "id" | "memberId">
+  ) => {
+    const newMemberId = `mbr-${Date.now()}`;
+    const now = new Date().toISOString().split("T")[0];
+    let newMembershipId: string | undefined = undefined;
+
+    if (membershipData) {
+      newMembershipId = `mship-${Date.now()}`;
+      const newMembership: Membership = {
+        ...membershipData,
+        id: newMembershipId,
+        memberId: newMemberId,
+      };
+      setMemberships((prev) => [newMembership, ...prev]);
+    }
+
+    const newMember: Member = {
+      ...memberData,
+      id: newMemberId,
+      joinedDate: now,
+      currentMembershipId: newMembershipId,
+    };
+
+    setMembers((prev) => [newMember, ...prev]);
+  };
+
+  const updateMember = (updatedMember: Member) => {
+    setMembers((prev) =>
+      prev.map((m) => (m.id === updatedMember.id ? updatedMember : m))
+    );
+  };
+
+  const deleteMember = (memberId: string) => {
+    setMembers((prev) => prev.filter((m) => m.id !== memberId));
+    setMemberships((prev) => prev.filter((ms) => ms.memberId !== memberId));
+  };
+
+  const updateMembershipStatus = (membershipId: string, status: MembershipStatus) => {
+    setMemberships((prev) =>
+      prev.map((ms) => {
+        if (ms.id === membershipId) {
+          return { ...ms, status };
+        }
+        return ms;
+      })
+    );
+
+    // Sync member status accordingly
+    setMembers((prev) =>
+      prev.map((m) => {
+        if (m.currentMembershipId === membershipId) {
+          const newMemberStatus =
+            status === "Active" || status === "Trial" || status === "Expiring"
+              ? "Active"
+              : status === "Past Due"
+              ? "Past Due"
+              : "Former";
+          return { ...m, status: newMemberStatus };
+        }
+        return m;
+      })
+    );
+  };
+
+  const renewMembership = (membershipId: string, nextRenewalDate: string) => {
+    setMemberships((prev) =>
+      prev.map((ms) =>
+        ms.id === membershipId
+          ? { ...ms, status: "Active", renewalDate: nextRenewalDate }
+          : ms
       )
     );
   };
@@ -293,6 +447,8 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
         organization,
         plans,
         staff,
+        members,
+        memberships,
         selectedLocation,
         setSelectedLocation,
         addLead,
@@ -310,6 +466,11 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
         addStaffMember,
         updateStaffMember,
         deleteStaffMember,
+        addMember,
+        updateMember,
+        deleteMember,
+        updateMembershipStatus,
+        renewMembership,
       }}
     >
       {children}

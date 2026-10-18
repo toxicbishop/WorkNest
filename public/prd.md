@@ -459,16 +459,22 @@ All endpoints must authenticate as needed, authorize every record access, valida
 - [x] Add linting (ESLint 9 flat config), strict TypeScript, Vitest test suite, and CodeQL workflow.
 - [x] Package management migrated to pnpm 12 with Dependabot and GitHub workflows.
 
-### Phase 2 — Organization, Multi-Location & Persistent Settings (IN PROGRESS)
-- [ ] Multi-location management (Downtown Hub, Westside Commons, Tech District, plus adding/editing custom locations).
-- [ ] Location-level operating hours, timezone, contact info, and capacity settings.
-- [ ] Global workspace organization profile, team members/roles configuration.
-- [ ] Active location filtering across Header, Dashboard, and Leads Pipeline.
-- [ ] Settings interface (`/settings`) with tabbed configuration for Organization, Locations, Plans, and Team.
-- [ ] Backend API client foundation & database persistence preparation.
+### Phase 2 — Organization, Multi-Location & Persistent Settings (COMPLETED)
+- [x] Multi-location management (Downtown Hub, Westside Commons, Tech District, plus adding/editing custom locations).
+- [x] Location-level operating hours, timezone, contact info, and capacity settings.
+- [x] Global workspace organization profile, team members/roles configuration.
+- [x] Active location filtering across Header, Dashboard, and Leads Pipeline.
+- [x] Settings interface (`/settings`) with tabbed configuration for Organization, Locations, Plans, and Team.
+- [x] Global currency migration to INR (₹) and Indian phone format (+91).
 
-### Phase 3 — Members and memberships
-- Build member profiles, plan management, conversion, renewals, and cancellation workflows.
+### Phase 3 — Members and Memberships (IN PROGRESS)
+- [x] Separate member identity from membership contracts (PRD Section 6.4).
+- [x] Member directory interface (`/members`) with search, filter, status tags, and plan indicators.
+- [x] Direct member onboarding modal (`MemberModal`) with plan assignment and billing interval selection.
+- [x] Member profile & contract view (`MemberDetailModal`) with renewal extension and contract cancellation/status controls.
+- [x] Lead-to-member conversion integration (`ConvertModal`) linked directly to member and membership records without duplicates.
+- [x] Local storage persistence for members and memberships across page refreshes.
+- [ ] Member activity history & guest check-in linking.
 
 ### Phase 4 — Booking operations
 - Model locations/spaces, availability, tours, bookings, check-in, and conflict prevention.
