@@ -213,4 +213,64 @@ export interface Booking {
   notes?: string;
 }
 
+export type InvoiceStatus =
+  | "Draft"
+  | "Open"
+  | "Paid"
+  | "Partially Paid"
+  | "Overdue"
+  | "Void"
+  | "Refunded";
+
+export interface InvoiceLineItem {
+  id: string;
+  description: string;
+  quantity: number;
+  unitPriceCents: number;
+  amountCents: number;
+}
+
+export type PaymentMethod =
+  | "UPI / NetBanking"
+  | "Credit Card"
+  | "Debit Card"
+  | "Bank Transfer"
+  | "Cash"
+  | "Cheque";
+
+export interface PaymentRecord {
+  id: string;
+  invoiceId: string;
+  amountCents: number;
+  paymentMethod: PaymentMethod;
+  transactionRef: string;
+  paidAt: string;
+  notes?: string;
+}
+
+export interface Invoice {
+  id: string;
+  invoiceNumber: string;
+  memberId: string;
+  memberName: string;
+  memberEmail: string;
+  companyName?: string;
+  locationName: string;
+  membershipId?: string;
+  bookingId?: string;
+  issueDate: string;
+  dueDate: string;
+  status: InvoiceStatus;
+  currency: string;
+  lineItems: InvoiceLineItem[];
+  subtotalCents: number;
+  taxRatePercent: number; // e.g. 18 for GST
+  taxAmountCents: number;
+  totalAmountCents: number;
+  paidAmountCents: number;
+  paymentRecords: PaymentRecord[];
+  notes?: string;
+  createdAt: string;
+}
+
 

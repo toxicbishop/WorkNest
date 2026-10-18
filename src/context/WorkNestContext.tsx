@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
+import { formatCurrency } from "@/lib/utils";
 import {
   Lead,
   Activity,
@@ -16,6 +17,9 @@ import {
   Space,
   Booking,
   BookingStatus,
+  Invoice,
+  InvoiceStatus,
+  PaymentMethod,
 } from "@/types";
 import {
   INITIAL_LEADS,
@@ -29,6 +33,7 @@ import {
   INITIAL_MEMBERSHIPS,
   INITIAL_SPACES,
   INITIAL_BOOKINGS,
+  INITIAL_INVOICES,
 } from "@/lib/mock-data";
 
 export type NewLeadData = Omit<Lead, "id" | "createdAt" | "updatedAt"> & { id?: string };
@@ -45,6 +50,7 @@ interface WorkNestContextType {
   memberships: Membership[];
   spaces: Space[];
   bookings: Booking[];
+  invoices: Invoice[];
   selectedLocation: string;
   setSelectedLocation: (loc: string) => void;
   addLead: (lead: NewLeadData) => void;
@@ -87,6 +93,20 @@ interface WorkNestContextType {
   updateBookingStatus: (bookingId: string, status: BookingStatus) => void;
   cancelBooking: (bookingId: string) => void;
   deleteBooking: (bookingId: string) => void;
+  // Phase 5 Invoicing, Billing & Payments
+  createInvoice: (
+    invoiceData: Omit<Invoice, "id" | "createdAt" | "paidAmountCents" | "paymentRecords">
+  ) => Invoice;
+  recordPayment: (
+    invoiceId: string,
+    amountCents: number,
+    paymentMethod: PaymentMethod,
+    transactionRef: string,
+    notes?: string
+  ) => { success: boolean; invoice?: Invoice };
+  updateInvoiceStatus: (invoiceId: string, status: InvoiceStatus) => void;
+  sendInvoiceReminder: (invoiceId: string) => void;
+  deleteInvoice: (invoiceId: string) => void;
 }
 
 const WorkNestContext = createContext<WorkNestContextType | undefined>(undefined);
@@ -101,6 +121,7 @@ const STORAGE_KEY_MEMBERS = "worknest_members_v1";
 const STORAGE_KEY_MEMBERSHIPS = "worknest_memberships_v1";
 const STORAGE_KEY_SPACES = "worknest_spaces_v1";
 const STORAGE_KEY_BOOKINGS = "worknest_bookings_v1";
+const STORAGE_KEY_INVOICES = "worknest_invoices_v1";
 
 export function WorkNestProvider({ children }: { children: React.ReactNode }) {
   const [leads, setLeads] = useState<Lead[]>(INITIAL_LEADS);
@@ -113,6 +134,7 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
   const [memberships, setMemberships] = useState<Membership[]>(INITIAL_MEMBERSHIPS);
   const [spaces, setSpaces] = useState<Space[]>(INITIAL_SPACES);
   const [bookings, setBookings] = useState<Booking[]>(INITIAL_BOOKINGS);
+  const [invoices, setInvoices] = useState<Invoice[]>(INITIAL_INVOICES);
   const [selectedLocation, setSelectedLocation] = useState<string>("All");
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -149,6 +171,9 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
 
         const savedBookings = localStorage.getItem(STORAGE_KEY_BOOKINGS);
         if (savedBookings) setBookings(JSON.parse(savedBookings));
+
+        const savedInvoices = localStorage.getItem(STORAGE_KEY_INVOICES);
+        if (savedInvoices) setInvoices(JSON.parse(savedInvoices));
       } catch {
         // ignore storage parse errors
       } finally {
@@ -173,6 +198,7 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem(STORAGE_KEY_MEMBERSHIPS, JSON.stringify(memberships));
       localStorage.setItem(STORAGE_KEY_SPACES, JSON.stringify(spaces));
       localStorage.setItem(STORAGE_KEY_BOOKINGS, JSON.stringify(bookings));
+      localStorage.setItem(STORAGE_KEY_INVOICES, JSON.stringify(invoices));
     } catch {
       // ignore write errors
     }
@@ -188,6 +214,7 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
     memberships,
     spaces,
     bookings,
+    invoices,
   ]);
 
   // Compute metrics dynamically from current persisted state (PRD FR-11)
@@ -608,6 +635,107 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
     setBookings((prev) => prev.filter((b) => b.id !== bookingId));
   };
 
+  // Phase 5 Invoicing, Billing & Payment Operations
+  const createInvoice = (
+    invoiceData: Omit<Invoice, "id" | "createdAt" | "paidAmountCents" | "paymentRecords">
+  ): Invoice => {
+    const now = new Date().toISOString();
+    const newInvoice: Invoice = {
+      ...invoiceData,
+      id: `inv-${Date.now()}`,
+      paidAmountCents: 0,
+      paymentRecords: [],
+      createdAt: now,
+    };
+    setInvoices((prev) => [newInvoice, ...prev]);
+    return newInvoice;
+  };
+
+  const recordPayment = (
+    invoiceId: string,
+    amountCents: number,
+    paymentMethod: PaymentMethod,
+    transactionRef: string,
+    notes?: string
+  ) => {
+    const invoice = invoices.find((inv) => inv.id === invoiceId);
+    if (!invoice) {
+      return { success: false };
+    }
+
+    const now = new Date().toISOString();
+    const paymentRecord = {
+      id: `pay-${Date.now()}`,
+      invoiceId,
+      amountCents,
+      paymentMethod,
+      transactionRef,
+      paidAt: now,
+      notes,
+    };
+
+    const newPaidAmount = invoice.paidAmountCents + amountCents;
+    const newStatus: InvoiceStatus =
+      newPaidAmount >= invoice.totalAmountCents ? "Paid" : "Partially Paid";
+
+    const updatedInvoice: Invoice = {
+      ...invoice,
+      paidAmountCents: newPaidAmount,
+      status: newStatus,
+      paymentRecords: [...invoice.paymentRecords, paymentRecord],
+    };
+
+    setInvoices((prev) =>
+      prev.map((inv) => (inv.id === invoiceId ? updatedInvoice : inv))
+    );
+
+    // If paid and member was past due, update member status to Active
+    if (newStatus === "Paid" && invoice.memberId) {
+      setMembers((prev) =>
+        prev.map((m) =>
+          m.id === invoice.memberId && m.status === "Past Due"
+            ? { ...m, status: "Active" }
+            : m
+        )
+      );
+    }
+
+    return { success: true, invoice: updatedInvoice };
+  };
+
+  const updateInvoiceStatus = (invoiceId: string, status: InvoiceStatus) => {
+    setInvoices((prev) =>
+      prev.map((inv) => (inv.id === invoiceId ? { ...inv, status } : inv))
+    );
+  };
+
+  const sendInvoiceReminder = (invoiceId: string) => {
+    const invoice = invoices.find((inv) => inv.id === invoiceId);
+    if (!invoice) return;
+
+    const now = new Date().toISOString();
+    const balanceRemaining = invoice.totalAmountCents - invoice.paidAmountCents;
+    const reminderTask: Activity = {
+      id: `act-${Date.now()}`,
+      type: "email",
+      title: `Payment Overdue Notice: ${invoice.invoiceNumber}`,
+      description: `Dispatched payment reminder for ${formatCurrency(
+        balanceRemaining,
+        "INR"
+      )} to ${invoice.memberName} (${invoice.memberEmail}).`,
+      dueDate: now,
+      completed: true,
+      outcome: "Automated payment reminder notice delivered successfully.",
+      staffName: "Billing System",
+      createdAt: now,
+    };
+    setActivities((prev) => [reminderTask, ...prev]);
+  };
+
+  const deleteInvoice = (invoiceId: string) => {
+    setInvoices((prev) => prev.filter((inv) => inv.id !== invoiceId));
+  };
+
   return (
     <WorkNestContext.Provider
       value={{
@@ -622,6 +750,7 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
         memberships,
         spaces,
         bookings,
+        invoices,
         selectedLocation,
         setSelectedLocation,
         addLead,
@@ -653,6 +782,11 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
         updateBookingStatus,
         cancelBooking,
         deleteBooking,
+        createInvoice,
+        recordPayment,
+        updateInvoiceStatus,
+        sendInvoiceReminder,
+        deleteInvoice,
       }}
     >
       {children}
