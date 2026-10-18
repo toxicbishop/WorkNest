@@ -30,7 +30,7 @@ const activityIcons: Record<ActivityType, React.ElementType> = {
 };
 
 export function ActivityFeed({ activities, onToggleComplete }: ActivityFeedProps) {
-  const currentTime = useCurrentTimestamp();
+  const currentTimestamp = useCurrentTimestamp();
 
   return (
     <div className="bg-white rounded-xl border border-[#E5E7EB] p-5 shadow-xs">
@@ -51,8 +51,8 @@ export function ActivityFeed({ activities, onToggleComplete }: ActivityFeedProps
           const Icon = activityIcons[act.type] || CheckCircle2;
           const isOverdue =
             !act.completed &&
-            currentTime > 0 &&
-            new Date(act.dueDate).getTime() < currentTime;
+            currentTimestamp > 0 &&
+            new Date(act.dueDate).getTime() < currentTimestamp;
 
           return (
             <div
