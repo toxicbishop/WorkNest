@@ -7,12 +7,12 @@ This guide describes how to configure, harden, and deploy WorkNest CRM in produc
 ## 1. System Architecture
 
 ```mermaid
-graph TD
-    Client["Browser / Client Apps"] -->|HTTPS :443| Proxy["Reverse Proxy (Nginx / Cloudflare / Caddy)"]
-    Proxy -->|HTTP :3000| NextApp["Next.js App Router (Node.js 20+)"]
-    Proxy -->|HTTP /api/v1| FastAPI["FastAPI Backend (Uvicorn / Gunicorn)"]
-    FastAPI -->|TCP :5432 (SSL)| Postgres[("PostgreSQL 15+ Database")]
-    FastAPI -->|Background Workers| Sched["Periodic Task Scheduler"]
+flowchart TD
+    Client["Browser / Client Apps"] -->|"HTTPS :443"| Proxy["Reverse Proxy (Nginx / Cloudflare / Caddy)"]
+    Proxy -->|"HTTP :3000"| NextApp["Next.js App Router (Node.js 20+)"]
+    Proxy -->|"HTTP /api/v1"| FastAPI["FastAPI Backend (Uvicorn / Gunicorn)"]
+    FastAPI -->|"TCP :5432 (SSL)"| Postgres[("PostgreSQL 15+ Database")]
+    FastAPI -->|"Background Workers"| Sched["Periodic Task Scheduler"]
 ```
 
 ### Application Boundary
