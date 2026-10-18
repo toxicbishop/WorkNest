@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
-import { DemoBanner } from "@/components/layout/DemoBanner";
 import { LeadModal } from "@/features/leads/LeadModal";
 import { useWorkNest } from "@/context/WorkNestContext";
 
@@ -21,9 +20,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-[#F7F8F6] text-[#1E2922] flex flex-col font-sans">
-      {/* Required PRD fixture indicator */}
-      <DemoBanner />
-
       <div className="flex-1 flex overflow-hidden">
         {/* Navigation Sidebar */}
         <Sidebar

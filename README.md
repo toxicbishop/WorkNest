@@ -8,7 +8,9 @@
 ![pnpm](https://img.shields.io/badge/pnpm-12.3.4-%234a4a4a.svg?style=flat&logo=pnpm&logoColor=f69220)
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)
 ![WCAG](https://img.shields.io/badge/Accessibility-WCAG_2.2_AA-059669?style=flat)
-![Status](https://img.shields.io/badge/Release-Phase_1_Frontend_Foundation-20382F?style=flat)
+![Status](https://img.shields.io/badge/Release-Phase_2_Multi--Location_&_Settings-20382F?style=flat)
+
+![WorkNest Dashboard](public/dashboard.png)
 
 WorkNest CRM is a dedicated coworking management and prospect conversion system. It unifies the complete coworking member lifecycle into one operational cockpit:
 
@@ -20,7 +22,6 @@ $$\text{Inquiry} \longrightarrow \text{Qualification} \longrightarrow \text{Foll
 
 - **Executive Operations Dashboard:**
   - KPI metrics with explicit, documented business definitions: Active Members, Open Pipeline Leads, Scheduled Tours (7d), and Recognized MRR.
-  - Transparent banner and tags ensuring demo fixtures are never misrepresented as live production data.
 - **Lead and Opportunity Pipeline:**
   - Complete operational stages: `New`, `Contacted`, `Tour Booked`, `Converted`, `Lost`.
   - Mandatory audit reason enforcement when marking a prospect as `Lost` (PRD Section 6.2).
@@ -67,8 +68,7 @@ WorkNest/
 │   │   ├── layout/
 │   │   │   ├── AppShell.tsx         # Responsive container shell
 │   │   │   ├── Header.tsx           # Workspace header & location scope
-│   │   │   ├── Sidebar.tsx          # Collapsible navigation
-│   │   │   └── DemoBanner.tsx       # Mandatory fixture disclaimer
+│   │   │   └── Sidebar.tsx          # Collapsible navigation
 │   │   └── ui/
 │   │       └── StatusBadge.tsx      # Stage status pill badges
 │   ├── context/
