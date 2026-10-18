@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Building, Globe, Mail, Clock, DollarSign, Check } from "lucide-react";
+import { Building, Globe, Mail, Clock, IndianRupee, Check } from "lucide-react";
 import { OrganizationSettings } from "@/types";
 
 interface OrganizationTabProps {
@@ -125,7 +125,7 @@ export function OrganizationTab({
               Default Currency
             </label>
             <div className="relative">
-              <DollarSign className="w-4 h-4 text-gray-400 absolute left-3 top-2.5 pointer-events-none" />
+              <IndianRupee className="w-4 h-4 text-gray-400 absolute left-3 top-2.5 pointer-events-none" />
               <select
                 value={defaultCurrency}
                 onChange={(e) => setDefaultCurrency(e.target.value)}

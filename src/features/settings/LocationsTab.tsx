@@ -418,7 +418,7 @@ export function LocationsTab({
                     type="text"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+1 (555) 012-3456"
+                    placeholder="+91 80 4567 8900"
                     className="w-full text-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#20382F] focus:outline-hidden"
                   />
                 </div>

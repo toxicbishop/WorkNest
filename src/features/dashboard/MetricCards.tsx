@@ -1,5 +1,5 @@
 import React from "react";
-import { Users, UserPlus, Calendar, DollarSign, Info } from "lucide-react";
+import { Users, UserPlus, Calendar, IndianRupee, Info } from "lucide-react";
 import { DashboardMetrics } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 
@@ -37,7 +37,7 @@ export function MetricCards({ metrics }: MetricCardsProps) {
       title: "Recognized MRR",
       value: formatCurrency(metrics.mrrCents),
       definition: metrics.definitionNotes.mrr,
-      icon: DollarSign,
+      icon: IndianRupee,
       trend: "Active subscription billing",
       color: "text-amber-700 bg-amber-50 border-amber-200",
     },
