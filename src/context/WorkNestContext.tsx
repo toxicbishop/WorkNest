@@ -13,6 +13,9 @@ import {
   Member,
   Membership,
   MembershipStatus,
+  Space,
+  Booking,
+  BookingStatus,
 } from "@/types";
 import {
   INITIAL_LEADS,
@@ -24,6 +27,8 @@ import {
   INITIAL_STAFF,
   INITIAL_MEMBERS,
   INITIAL_MEMBERSHIPS,
+  INITIAL_SPACES,
+  INITIAL_BOOKINGS,
 } from "@/lib/mock-data";
 
 export type NewLeadData = Omit<Lead, "id" | "createdAt" | "updatedAt"> & { id?: string };
@@ -38,6 +43,8 @@ interface WorkNestContextType {
   staff: StaffMember[];
   members: Member[];
   memberships: Membership[];
+  spaces: Space[];
+  bookings: Booking[];
   selectedLocation: string;
   setSelectedLocation: (loc: string) => void;
   addLead: (lead: NewLeadData) => void;
@@ -62,6 +69,24 @@ interface WorkNestContextType {
   deleteMember: (memberId: string) => void;
   updateMembershipStatus: (membershipId: string, status: MembershipStatus) => void;
   renewMembership: (membershipId: string, nextRenewalDate: string) => void;
+  // Phase 4 Space Inventory & Booking Operations
+  addSpace: (space: Omit<Space, "id">) => void;
+  updateSpace: (space: Space) => void;
+  deleteSpace: (spaceId: string) => void;
+  toggleSpaceActive: (spaceId: string) => void;
+  checkBookingConflict: (
+    spaceId: string,
+    date: string,
+    startTime: string,
+    endTime: string,
+    excludeBookingId?: string
+  ) => { hasConflict: boolean; conflictingBooking?: Booking };
+  createBooking: (
+    booking: Omit<Booking, "id" | "createdAt">
+  ) => { success: boolean; error?: string; booking?: Booking };
+  updateBookingStatus: (bookingId: string, status: BookingStatus) => void;
+  cancelBooking: (bookingId: string) => void;
+  deleteBooking: (bookingId: string) => void;
 }
 
 const WorkNestContext = createContext<WorkNestContextType | undefined>(undefined);
@@ -74,6 +99,8 @@ const STORAGE_KEY_PLANS = "worknest_plans_v1";
 const STORAGE_KEY_STAFF = "worknest_staff_v1";
 const STORAGE_KEY_MEMBERS = "worknest_members_v1";
 const STORAGE_KEY_MEMBERSHIPS = "worknest_memberships_v1";
+const STORAGE_KEY_SPACES = "worknest_spaces_v1";
+const STORAGE_KEY_BOOKINGS = "worknest_bookings_v1";
 
 export function WorkNestProvider({ children }: { children: React.ReactNode }) {
   const [leads, setLeads] = useState<Lead[]>(INITIAL_LEADS);
@@ -84,6 +111,8 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
   const [staff, setStaff] = useState<StaffMember[]>(INITIAL_STAFF);
   const [members, setMembers] = useState<Member[]>(INITIAL_MEMBERS);
   const [memberships, setMemberships] = useState<Membership[]>(INITIAL_MEMBERSHIPS);
+  const [spaces, setSpaces] = useState<Space[]>(INITIAL_SPACES);
+  const [bookings, setBookings] = useState<Booking[]>(INITIAL_BOOKINGS);
   const [selectedLocation, setSelectedLocation] = useState<string>("All");
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -114,6 +143,12 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
 
         const savedMemberships = localStorage.getItem(STORAGE_KEY_MEMBERSHIPS);
         if (savedMemberships) setMemberships(JSON.parse(savedMemberships));
+
+        const savedSpaces = localStorage.getItem(STORAGE_KEY_SPACES);
+        if (savedSpaces) setSpaces(JSON.parse(savedSpaces));
+
+        const savedBookings = localStorage.getItem(STORAGE_KEY_BOOKINGS);
+        if (savedBookings) setBookings(JSON.parse(savedBookings));
       } catch {
         // ignore storage parse errors
       } finally {
@@ -136,10 +171,24 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem(STORAGE_KEY_STAFF, JSON.stringify(staff));
       localStorage.setItem(STORAGE_KEY_MEMBERS, JSON.stringify(members));
       localStorage.setItem(STORAGE_KEY_MEMBERSHIPS, JSON.stringify(memberships));
+      localStorage.setItem(STORAGE_KEY_SPACES, JSON.stringify(spaces));
+      localStorage.setItem(STORAGE_KEY_BOOKINGS, JSON.stringify(bookings));
     } catch {
       // ignore write errors
     }
-  }, [isHydrated, leads, activities, locations, organization, plans, staff, members, memberships]);
+  }, [
+    isHydrated,
+    leads,
+    activities,
+    locations,
+    organization,
+    plans,
+    staff,
+    members,
+    memberships,
+    spaces,
+    bookings,
+  ]);
 
   // Compute metrics dynamically from current persisted state (PRD FR-11)
   const metrics: DashboardMetrics = useMemo(() => {
@@ -437,6 +486,128 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
     setStaff((prev) => prev.filter((s) => s.id !== staffId));
   };
 
+  // Phase 4 Space Management
+  const addSpace = (spaceData: Omit<Space, "id">) => {
+    const newSpace: Space = {
+      ...spaceData,
+      id: `spc-${Date.now()}`,
+    };
+    setSpaces((prev) => [...prev, newSpace]);
+  };
+
+  const updateSpace = (updatedSpace: Space) => {
+    setSpaces((prev) =>
+      prev.map((s) => (s.id === updatedSpace.id ? updatedSpace : s))
+    );
+  };
+
+  const deleteSpace = (spaceId: string) => {
+    setSpaces((prev) => prev.filter((s) => s.id !== spaceId));
+  };
+
+  const toggleSpaceActive = (spaceId: string) => {
+    setSpaces((prev) =>
+      prev.map((s) => (s.id === spaceId ? { ...s, isActive: !s.isActive } : s))
+    );
+  };
+
+  // Phase 4 Booking Conflict Prevention Engine
+  const checkBookingConflict = (
+    spaceId: string,
+    date: string,
+    startTime: string,
+    endTime: string,
+    excludeBookingId?: string
+  ) => {
+    const conflicting = bookings.find((b) => {
+      if (b.id === excludeBookingId) return false;
+      if (b.spaceId !== spaceId) return false;
+      if (b.date !== date) return false;
+      if (b.status === "Cancelled" || b.status === "No Show") return false;
+
+      // Overlap: newStart < existingEnd && newEnd > existingStart
+      return startTime < b.endTime && endTime > b.startTime;
+    });
+
+    return {
+      hasConflict: !!conflicting,
+      conflictingBooking: conflicting,
+    };
+  };
+
+  const createBooking = (bookingData: Omit<Booking, "id" | "createdAt">) => {
+    const conflictCheck = checkBookingConflict(
+      bookingData.spaceId,
+      bookingData.date,
+      bookingData.startTime,
+      bookingData.endTime
+    );
+
+    if (conflictCheck.hasConflict) {
+      const existing = conflictCheck.conflictingBooking;
+      return {
+        success: false,
+        error: `Conflict detected: "${existing?.title}" is already booked for this space from ${existing?.startTime} to ${existing?.endTime}.`,
+      };
+    }
+
+    const now = new Date().toISOString();
+    const newBooking: Booking = {
+      ...bookingData,
+      id: `bkg-${Date.now()}`,
+      createdAt: now,
+    };
+
+    setBookings((prev) => [newBooking, ...prev]);
+
+    // If this is a prospect tour linked to a lead, update lead status to Tour Booked
+    if (newBooking.bookingType === "Prospect Tour" && newBooking.leadId) {
+      setLeads((prev) =>
+        prev.map((l) =>
+          l.id === newBooking.leadId && (l.status === "New" || l.status === "Contacted")
+            ? { ...l, status: "Tour Booked", updatedAt: now }
+            : l
+        )
+      );
+
+      // Record a follow-up tour activity
+      const tourActivity: Activity = {
+        id: `act-${Date.now()}`,
+        leadId: newBooking.leadId,
+        leadName: newBooking.bookedByName,
+        type: "tour",
+        title: `Walkthrough Tour at ${newBooking.spaceName}`,
+        description: `Scheduled walkthrough tour on ${newBooking.date} from ${newBooking.startTime} to ${newBooking.endTime}. Attendees: ${newBooking.attendeesCount}.`,
+        dueDate: `${newBooking.date}T${newBooking.startTime}:00Z`,
+        completed: false,
+        staffName: "Staff On Duty",
+        createdAt: now,
+      };
+      setActivities((prev) => [tourActivity, ...prev]);
+    }
+
+    return {
+      success: true,
+      booking: newBooking,
+    };
+  };
+
+  const updateBookingStatus = (bookingId: string, status: BookingStatus) => {
+    setBookings((prev) =>
+      prev.map((b) => (b.id === bookingId ? { ...b, status } : b))
+    );
+  };
+
+  const cancelBooking = (bookingId: string) => {
+    setBookings((prev) =>
+      prev.map((b) => (b.id === bookingId ? { ...b, status: "Cancelled" } : b))
+    );
+  };
+
+  const deleteBooking = (bookingId: string) => {
+    setBookings((prev) => prev.filter((b) => b.id !== bookingId));
+  };
+
   return (
     <WorkNestContext.Provider
       value={{
@@ -449,6 +620,8 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
         staff,
         members,
         memberships,
+        spaces,
+        bookings,
         selectedLocation,
         setSelectedLocation,
         addLead,
@@ -471,6 +644,15 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
         deleteMember,
         updateMembershipStatus,
         renewMembership,
+        addSpace,
+        updateSpace,
+        deleteSpace,
+        toggleSpaceActive,
+        checkBookingConflict,
+        createBooking,
+        updateBookingStatus,
+        cancelBooking,
+        deleteBooking,
       }}
     >
       {children}

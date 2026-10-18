@@ -164,3 +164,53 @@ export interface Member {
   notes?: string;
 }
 
+export type SpaceType =
+  | "Meeting Room"
+  | "Conference Hall"
+  | "Podcast Studio"
+  | "Event Space"
+  | "Phone Booth"
+  | "Hot Desk Zone"
+  | "Dedicated Desk Bay"
+  | "Private Office Suite";
+
+export interface Space {
+  id: string;
+  locationId: string;
+  locationName: string;
+  name: string;
+  type: SpaceType;
+  capacity: number;
+  hourlyRateCents: number; // e.g. 50000 = ₹500/hr
+  amenities: string[]; // e.g. ["4K Screen", "Polycom AV", "Whiteboard", "High-speed Fiber", "Acoustic Insulation"]
+  floorOrZone: string;
+  isActive: boolean;
+  notes?: string;
+}
+
+export type BookingType = "Meeting Room" | "Prospect Tour" | "Event" | "Desk";
+export type BookingStatus = "Confirmed" | "Checked In" | "Completed" | "Cancelled" | "No Show";
+
+export interface Booking {
+  id: string;
+  spaceId: string;
+  spaceName: string;
+  locationName: string;
+  title: string;
+  bookingType: BookingType;
+  bookedByName: string;
+  bookedByEmail: string;
+  memberId?: string;
+  leadId?: string;
+  date: string; // YYYY-MM-DD
+  startTime: string; // HH:MM (24h, e.g. "10:00")
+  endTime: string; // HH:MM (24h, e.g. "11:30")
+  attendeesCount: number;
+  status: BookingStatus;
+  totalCostCents: number;
+  creditsUsedHours: number;
+  createdAt: string;
+  notes?: string;
+}
+
+
