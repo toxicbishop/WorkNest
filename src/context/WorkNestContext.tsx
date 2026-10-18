@@ -1,7 +1,7 @@
 "use client";
-
-import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
 import { formatCurrency } from "@/lib/utils";
+import { apiClient } from "@/lib/api-client";
 import {
   Lead,
   Activity,
@@ -39,6 +39,8 @@ import {
 export type NewLeadData = Omit<Lead, "id" | "createdAt" | "updatedAt"> & { id?: string };
 
 interface WorkNestContextType {
+  isLiveApi: boolean;
+  refreshFromServer: () => Promise<void>;
   leads: Lead[];
   activities: Activity[];
   metrics: DashboardMetrics;
@@ -137,6 +139,52 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
   const [invoices, setInvoices] = useState<Invoice[]>(INITIAL_INVOICES);
   const [selectedLocation, setSelectedLocation] = useState<string>("All");
   const [isHydrated, setIsHydrated] = useState(false);
+  const [isLiveApi, setIsLiveApi] = useState(false);
+
+  const refreshFromServer = useCallback(async () => {
+    try {
+      const isHealthy = await apiClient.checkHealth();
+      if (!isHealthy) return;
+      setIsLiveApi(true);
+
+      const [
+        serverLeads,
+        serverMembers,
+        serverSpaces,
+        serverBookings,
+        serverInvoices,
+        serverLocations,
+        serverPlans,
+        serverStaff,
+        serverOrg,
+        serverActivities,
+      ] = await Promise.all([
+        apiClient.leads.list().catch(() => null),
+        apiClient.members.list().catch(() => null),
+        apiClient.spaces.list().catch(() => null),
+        apiClient.bookings.list().catch(() => null),
+        apiClient.invoices.list().catch(() => null),
+        apiClient.settings.listLocations().catch(() => null),
+        apiClient.settings.listPlans().catch(() => null),
+        apiClient.settings.listStaff().catch(() => null),
+        apiClient.settings.getOrganization().catch(() => null),
+        apiClient.activities.list().catch(() => null),
+      ]);
+
+      if (serverLeads && serverLeads.length > 0) setLeads(serverLeads);
+      if (serverMembers && serverMembers.length > 0) setMembers(serverMembers);
+      if (serverSpaces && serverSpaces.length > 0) setSpaces(serverSpaces);
+      if (serverBookings && serverBookings.length > 0) setBookings(serverBookings);
+      if (serverInvoices && serverInvoices.length > 0) setInvoices(serverInvoices);
+      if (serverLocations && serverLocations.length > 0) setLocations(serverLocations);
+      if (serverPlans && serverPlans.length > 0) setPlans(serverPlans);
+      if (serverStaff && serverStaff.length > 0) setStaff(serverStaff);
+      if (serverOrg) setOrganization(serverOrg);
+      if (serverActivities && serverActivities.length > 0) setActivities(serverActivities);
+    } catch {
+      // Offline fallback
+    }
+  }, []);
 
   // Load persisted state from localStorage after mount using requestAnimationFrame
   useEffect(() => {
@@ -183,6 +231,16 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
 
     return () => cancelAnimationFrame(handle);
   }, []);
+
+  useEffect(() => {
+    if (isHydrated) {
+      // Execute asynchronously to avoid react-hooks/set-state-in-effect
+      const timer = setTimeout(() => {
+        void refreshFromServer();
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  }, [isHydrated, refreshFromServer]);
 
   // Save changes to localStorage only after initial hydration has loaded
   useEffect(() => {
@@ -739,6 +797,8 @@ export function WorkNestProvider({ children }: { children: React.ReactNode }) {
   return (
     <WorkNestContext.Provider
       value={{
+        isLiveApi,
+        refreshFromServer,
         leads,
         activities,
         metrics,

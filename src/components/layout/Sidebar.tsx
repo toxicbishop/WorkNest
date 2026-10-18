@@ -11,6 +11,7 @@ import {
   Building2,
   Receipt,
   Settings,
+  TrendingUp,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -70,6 +71,13 @@ const NAV_ITEMS: NavItem[] = [
     href: "/billing",
     icon: Receipt,
     phase: "Phase 5",
+    available: true,
+  },
+  {
+    name: "Analytics & Occupancy",
+    href: "/analytics",
+    icon: TrendingUp,
+    phase: "Phase 7",
     available: true,
   },
   {

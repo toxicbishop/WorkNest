@@ -12,7 +12,7 @@
 ![pnpm](https://img.shields.io/badge/pnpm-12.3.4-%234a4a4a.svg?style=flat&logo=pnpm&logoColor=f69220)
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)
 ![WCAG](https://img.shields.io/badge/Accessibility-WCAG_2.2_AA-059669?style=flat)
-![Status](https://img.shields.io/badge/Release-Phase_6_FastAPI_Backend-20382F?style=flat)
+![Status](https://img.shields.io/badge/Release-Phase_7_Frontend_Integration-20382F?style=flat)
 
 ![WorkNest Dashboard](public/dashboard.png)
 
@@ -27,6 +27,7 @@ $$\text{Inquiry} \longrightarrow \text{Qualification} \longrightarrow \text{Foll
 | Layer | Technology |
 | :--- | :--- |
 | **Frontend Framework** | [Next.js 16 (App Router)](https://nextjs.org/) with React 19 |
+| **State & Data Caching** | [TanStack Query v5](https://tanstack.com/query/latest) |
 | **Language** | [TypeScript](https://www.typescriptlang.org/) (Strict Mode) |
 | **Styling** | [Tailwind CSS v4](https://tailwindcss.com/) with WorkNest Design Tokens |
 | **Icons** | [Lucide React](https://lucide.dev/) |
@@ -49,6 +50,7 @@ WorkNest/
 │   ├── app/                         # Routes and layouts
 │   │   ├── layout.tsx
 │   │   ├── page.tsx                 # Operations Dashboard
+│   │   ├── analytics/page.tsx       # Analytics & Occupancy Cockpit
 │   │   ├── leads/page.tsx
 │   │   ├── members/page.tsx
 │   │   ├── spaces/page.tsx
@@ -57,10 +59,12 @@ WorkNest/
 │   │   └── settings/page.tsx
 │   ├── components/
 │   │   ├── layout/                  # AppShell, Header, Sidebar, Notifications
+│   │   ├── providers/               # TanStack QueryProvider
 │   │   └── ui/                      # StatusBadge and shared primitives
 │   ├── context/
-│   │   └── WorkNestContext.tsx       # Client state store & localStorage sync
+│   │   └── WorkNestContext.tsx       # Client state store & FastAPI sync
 │   ├── features/                    # Domain feature modules
+│   │   ├── analytics/               # Occupancy, conversion velocity, utilization
 │   │   ├── dashboard/
 │   │   ├── leads/
 │   │   ├── members/
@@ -69,10 +73,14 @@ WorkNest/
 │   │   ├── billing/
 │   │   └── settings/
 │   ├── lib/
+│   │   ├── api-client.ts            # Typed REST API client (FastAPI client)
 │   │   ├── mock-data.ts             # Demo fixtures for offline/frontend mode
 │   │   └── utils.ts
 │   └── types/
 │       └── index.ts                 # Shared domain models
+│
+├── docs/
+│   └── deployment.md                # Docker, Compose, and production deployment guide
 │
 ├── server/                          # Python / FastAPI backend
 │   ├── app/
@@ -238,7 +246,18 @@ All endpoints are prefixed with `/api/v1`. Interactive OpenAPI documentation is 
 | **Bookings** | `POST /bookings/check-conflict`, `GET/POST /bookings`, `POST /bookings/{id}/cancel` |
 | **Invoices** | `GET/POST /invoices`, `POST /invoices/{id}/payments`, `POST /invoices/{id}/void` |
 | **Settings** | `GET/PATCH /settings/organization`, CRUD for locations, plans, and staff |
-| **Dashboard** | `GET /dashboard/metrics`, `GET /dashboard/notifications` |
+| **Dashboard** | `GET /dashboard/metrics`, `GET /dashboard/notifications`, `GET /dashboard/analytics` |
+
+---
+
+## Production Deployment & Hardening
+
+See [`docs/deployment.md`](docs/deployment.md) for production deployment workflows:
+- Multi-stage Docker packaging (`Dockerfile.web` and `Dockerfile.api`)
+- Containerized orchestration with `docker-compose.prod.yml`
+- Production reverse-proxy security headers (HSTS, CSP, X-Frame-Options, Permissions-Policy)
+- Database migration automation via Alembic
+- Zero-downtime healthcheck probes (`/api/v1/health` and `/ready`)
 
 ---
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { WorkNestProvider } from "@/context/WorkNestContext";
+import QueryProvider from "@/components/providers/QueryProvider";
 import { AppShell } from "@/components/layout/AppShell";
 
 export const metadata: Metadata = {
@@ -16,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-[#F7F8F6]">
-        <WorkNestProvider>
-          <AppShell>{children}</AppShell>
-        </WorkNestProvider>
+        <QueryProvider>
+          <WorkNestProvider>
+            <AppShell>{children}</AppShell>
+          </WorkNestProvider>
+        </QueryProvider>
       </body>
     </html>
   );
