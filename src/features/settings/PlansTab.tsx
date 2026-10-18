@@ -162,7 +162,7 @@ export function PlansTab({
             <form onSubmit={handleSave} className="p-6 space-y-4">
               <div>
                 <label className="block text-xs font-medium text-[#1E2922] mb-1">
-                  Monthly Rate (USD $) *
+                  Monthly Rate (INR ₹) *
                 </label>
                 <input
                   type="number"

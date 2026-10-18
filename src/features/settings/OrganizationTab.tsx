@@ -131,6 +131,7 @@ export function OrganizationTab({
                 onChange={(e) => setDefaultCurrency(e.target.value)}
                 className="w-full text-xs pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#20382F] focus:outline-hidden bg-white"
               >
+                <option value="INR (₹)">INR (₹) — Indian Rupee</option>
                 <option value="USD ($)">USD ($) — United States Dollar</option>
                 <option value="EUR (€)">EUR (€) — Euro</option>
                 <option value="GBP (£)">GBP (£) — British Pound</option>

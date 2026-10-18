@@ -180,7 +180,7 @@ export const INITIAL_METRICS: DashboardMetrics = {
   activeMembers: 142,
   openLeads: 24,
   toursScheduledThisWeek: 9,
-  mrrCents: 4850000, // $48,500.00
+  mrrCents: 385000000, // ₹38,50,000 (₹38.5 Lakhs / mo)
   pipelineCounts: {
     New: 8,
     Contacted: 11,
@@ -248,9 +248,9 @@ export const INITIAL_LOCATIONS: Location[] = [
 export const INITIAL_ORGANIZATION: OrganizationSettings = {
   name: "WorkNest Co-working Network",
   supportEmail: "support@worknest.co",
-  defaultCurrency: "USD ($)",
-  primaryTimezone: "America/Los_Angeles (PT)",
-  taxId: "XX-XXXX921",
+  defaultCurrency: "INR (₹)",
+  primaryTimezone: "Asia/Kolkata (IST)",
+  taxId: "GSTIN-27AAAAA0000A1Z5",
   websiteUrl: "https://worknest.co",
   autoAssignLeads: true,
   leadResponseGoalHours: 4,
@@ -261,8 +261,8 @@ export const INITIAL_MEMBERSHIP_PLANS: MembershipPlan[] = [
     id: "plan-hotdesk",
     name: "Flex Hot Desk",
     code: "Hot Desk",
-    monthlyRateCents: 27500, // $275/mo
-    currency: "USD",
+    monthlyRateCents: 650000, // ₹6,500/mo
+    currency: "INR",
     meetingRoomCreditsHours: 4,
     printingCreditsPages: 100,
     includedLocations: ["All"],
@@ -273,8 +273,8 @@ export const INITIAL_MEMBERSHIP_PLANS: MembershipPlan[] = [
     id: "plan-dedicated",
     name: "Dedicated Desk",
     code: "Dedicated Desk",
-    monthlyRateCents: 47500, // $475/mo
-    currency: "USD",
+    monthlyRateCents: 1150000, // ₹11,500/mo
+    currency: "INR",
     meetingRoomCreditsHours: 10,
     printingCreditsPages: 250,
     includedLocations: ["All"],
@@ -285,8 +285,8 @@ export const INITIAL_MEMBERSHIP_PLANS: MembershipPlan[] = [
     id: "plan-office",
     name: "Private Office (2-6 Pax)",
     code: "Private Office",
-    monthlyRateCents: 145000, // $1,450/mo
-    currency: "USD",
+    monthlyRateCents: 3800000, // ₹38,000/mo
+    currency: "INR",
     meetingRoomCreditsHours: 24,
     printingCreditsPages: 500,
     includedLocations: ["All"],
@@ -297,8 +297,8 @@ export const INITIAL_MEMBERSHIP_PLANS: MembershipPlan[] = [
     id: "plan-virtual",
     name: "Virtual Office & Business Address",
     code: "Virtual Office",
-    monthlyRateCents: 9500, // $95/mo
-    currency: "USD",
+    monthlyRateCents: 250000, // ₹2,500/mo
+    currency: "INR",
     meetingRoomCreditsHours: 2,
     printingCreditsPages: 0,
     includedLocations: ["All"],
@@ -309,8 +309,8 @@ export const INITIAL_MEMBERSHIP_PLANS: MembershipPlan[] = [
     id: "plan-enterprise",
     name: "Enterprise Custom Suite",
     code: "Enterprise Suite",
-    monthlyRateCents: 380000, // $3,800/mo
-    currency: "USD",
+    monthlyRateCents: 12500000, // ₹1,25,000/mo
+    currency: "INR",
     meetingRoomCreditsHours: 40,
     printingCreditsPages: 1000,
     includedLocations: ["All"],
