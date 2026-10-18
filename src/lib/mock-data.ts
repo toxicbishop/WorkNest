@@ -1,4 +1,12 @@
-import { Lead, Activity, DashboardMetrics } from "@/types";
+import {
+  Lead,
+  Activity,
+  DashboardMetrics,
+  Location,
+  OrganizationSettings,
+  MembershipPlan,
+  StaffMember,
+} from "@/types";
 
 export const INITIAL_LEADS: Lead[] = [
   {
@@ -188,3 +196,161 @@ export const INITIAL_METRICS: DashboardMetrics = {
     mrr: "Monthly Recurring Revenue recognized from active subscription memberships.",
   },
 };
+
+export const INITIAL_LOCATIONS: Location[] = [
+  {
+    id: "loc-downtown",
+    name: "Downtown Hub",
+    address: "450 South Flower St, Suite 1200",
+    city: "Los Angeles",
+    state: "CA",
+    zip: "90071",
+    timezone: "America/Los_Angeles",
+    operatingHours: "Mon - Fri: 8:00 AM - 8:00 PM (24/7 Member Keycard Access)",
+    totalCapacity: 120,
+    currentOccupancyRate: 88,
+    phone: "+1 (213) 555-0142",
+    managerName: "Sarah Jenkins",
+    status: "Active",
+  },
+  {
+    id: "loc-westside",
+    name: "Westside Commons",
+    address: "12233 W Olympic Blvd, 3rd Floor",
+    city: "West Los Angeles",
+    state: "CA",
+    zip: "90064",
+    timezone: "America/Los_Angeles",
+    operatingHours: "Mon - Fri: 8:30 AM - 7:00 PM (24/7 Dedicated Access)",
+    totalCapacity: 85,
+    currentOccupancyRate: 74,
+    phone: "+1 (310) 555-0199",
+    managerName: "Marcus Vance",
+    status: "Active",
+  },
+  {
+    id: "loc-tech-district",
+    name: "Tech District",
+    address: "520 Innovation Way, Building C",
+    city: "Pasadena",
+    state: "CA",
+    zip: "91101",
+    timezone: "America/Los_Angeles",
+    operatingHours: "Mon - Fri: 8:00 AM - 9:00 PM",
+    totalCapacity: 150,
+    currentOccupancyRate: 62,
+    phone: "+1 (626) 555-0183",
+    managerName: "Elena Rostova",
+    status: "Active",
+  },
+];
+
+export const INITIAL_ORGANIZATION: OrganizationSettings = {
+  name: "WorkNest Co-working Network",
+  supportEmail: "support@worknest.co",
+  defaultCurrency: "USD ($)",
+  primaryTimezone: "America/Los_Angeles (PT)",
+  taxId: "XX-XXXX921",
+  websiteUrl: "https://worknest.co",
+  autoAssignLeads: true,
+  leadResponseGoalHours: 4,
+};
+
+export const INITIAL_MEMBERSHIP_PLANS: MembershipPlan[] = [
+  {
+    id: "plan-hotdesk",
+    name: "Flex Hot Desk",
+    code: "Hot Desk",
+    monthlyRateCents: 27500, // $275/mo
+    currency: "USD",
+    meetingRoomCreditsHours: 4,
+    printingCreditsPages: 100,
+    includedLocations: ["All"],
+    description: "Open seating across common lounges, silent library, and phone booths.",
+    isActive: true,
+  },
+  {
+    id: "plan-dedicated",
+    name: "Dedicated Desk",
+    code: "Dedicated Desk",
+    monthlyRateCents: 47500, // $475/mo
+    currency: "USD",
+    meetingRoomCreditsHours: 10,
+    printingCreditsPages: 250,
+    includedLocations: ["All"],
+    description: "Personal assigned ergonomic desk with locking filing cabinet and 24/7 access.",
+    isActive: true,
+  },
+  {
+    id: "plan-office",
+    name: "Private Office (2-6 Pax)",
+    code: "Private Office",
+    monthlyRateCents: 145000, // $1,450/mo
+    currency: "USD",
+    meetingRoomCreditsHours: 24,
+    printingCreditsPages: 500,
+    includedLocations: ["All"],
+    description: "Sound-isolated private office suite with frosted privacy glass and company signage.",
+    isActive: true,
+  },
+  {
+    id: "plan-virtual",
+    name: "Virtual Office & Business Address",
+    code: "Virtual Office",
+    monthlyRateCents: 9500, // $95/mo
+    currency: "USD",
+    meetingRoomCreditsHours: 2,
+    printingCreditsPages: 0,
+    includedLocations: ["All"],
+    description: "Prestigious commercial mailing address, secure mail forwarding, and member portal.",
+    isActive: true,
+  },
+  {
+    id: "plan-enterprise",
+    name: "Enterprise Custom Suite",
+    code: "Enterprise Suite",
+    monthlyRateCents: 380000, // $3,800/mo
+    currency: "USD",
+    meetingRoomCreditsHours: 40,
+    printingCreditsPages: 1000,
+    includedLocations: ["All"],
+    description: "Dedicated custom layout for teams of 10-25 with private conference room.",
+    isActive: true,
+  },
+];
+
+export const INITIAL_STAFF: StaffMember[] = [
+  {
+    id: "staff-1",
+    name: "Sarah Jenkins",
+    email: "s.jenkins@worknest.co",
+    role: "Community Manager",
+    assignedLocations: ["Downtown Hub"],
+    status: "Active",
+  },
+  {
+    id: "staff-2",
+    name: "Marcus Vance",
+    email: "m.vance@worknest.co",
+    role: "Sales Lead",
+    assignedLocations: ["Westside Commons", "Downtown Hub"],
+    status: "Active",
+  },
+  {
+    id: "staff-3",
+    name: "Elena Rostova",
+    email: "e.rostova@worknest.co",
+    role: "Community Manager",
+    assignedLocations: ["Tech District"],
+    status: "Active",
+  },
+  {
+    id: "staff-4",
+    name: "Alex Rivera",
+    email: "a.rivera@worknest.co",
+    role: "Workspace Owner",
+    assignedLocations: ["All"],
+    status: "Active",
+  },
+];
+

@@ -1,9 +1,9 @@
 # WorkNest CRM — Product Requirements Document (PRD)
 
 - **Product:** WorkNest CRM
-- **Document status:** Initial product specification
-- **Version:** 1.0
-- **Last updated:** 2026-10-18
+- **Document status:** Living product specification & progress tracker
+- **Version:** 1.1
+- **Last updated:** 2026-10-18 (Phase 1 Complete, Phase 2 in progress)
 - **Audience:** Product, design, frontend, backend, QA, and AI coding agents
 
 ## 1. Product summary
@@ -450,17 +450,22 @@ All endpoints must authenticate as needed, authorize every record access, valida
 
 ## 14. Delivery phases
 
-### Phase 1 — Frontend foundation
-- Establish app shell, design tokens, navigation, and responsive layout.
-- Build dashboard with clearly labelled demo data.
-- Implement lead table, search/filter, add/edit form, and status updates.
-- Add linting, formatting, and basic component tests.
+### Phase 1 — Frontend foundation (COMPLETED)
+- [x] Establish app shell, design tokens, navigation, and responsive layout.
+- [x] Build dashboard with clearly labelled demo data and business definitions.
+- [x] Implement lead table, search/filter, add/edit form, and status updates.
+- [x] Implement lead conversion modal and activity follow-up tracking.
+- [x] Local storage client-side persistence and safe hydration timestamp store.
+- [x] Add linting (ESLint 9 flat config), strict TypeScript, Vitest test suite, and CodeQL workflow.
+- [x] Package management migrated to pnpm 12 with Dependabot and GitHub workflows.
 
-### Phase 2 — Persistent CRM foundation
-- Add authentication, users, roles, database migrations, and API client.
-- Persist leads and activities.
-- Implement server-side search/filter/pagination and audit events.
-- Replace all mock dashboard metrics.
+### Phase 2 — Organization, Multi-Location & Persistent Settings (IN PROGRESS)
+- [ ] Multi-location management (Downtown Hub, Westside Commons, Tech District, plus adding/editing custom locations).
+- [ ] Location-level operating hours, timezone, contact info, and capacity settings.
+- [ ] Global workspace organization profile, team members/roles configuration.
+- [ ] Active location filtering across Header, Dashboard, and Leads Pipeline.
+- [ ] Settings interface (`/settings`) with tabbed configuration for Organization, Locations, Plans, and Team.
+- [ ] Backend API client foundation & database persistence preparation.
 
 ### Phase 3 — Members and memberships
 - Build member profiles, plan management, conversion, renewals, and cancellation workflows.

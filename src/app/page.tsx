@@ -17,6 +17,7 @@ export default function DashboardPage() {
     leads,
     activities,
     metrics,
+    locations,
     selectedLocation,
     addLead,
     updateLead,
@@ -133,25 +134,43 @@ export default function DashboardPage() {
 
           {/* Location Quick Glance */}
           <div className="bg-white rounded-xl border border-[#E5E7EB] p-5 shadow-xs">
-            <div className="flex items-center gap-2 mb-3">
-              <Building className="w-4 h-4 text-emerald-800" />
-              <h3 className="text-xs font-semibold text-gray-900 uppercase tracking-wider">
-                Location Inventory Health
-              </h3>
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Building className="w-4 h-4 text-[#20382F]" />
+                <h3 className="text-xs font-semibold text-gray-900 uppercase tracking-wider">
+                  Locations & Capacity
+                </h3>
+              </div>
+              <Link
+                href="/settings"
+                className="text-[11px] font-medium text-[#20382F] hover:underline"
+              >
+                Manage
+              </Link>
             </div>
             <div className="space-y-3 text-xs text-gray-600">
-              <div className="flex justify-between items-center pb-2 border-b border-gray-100">
-                <span>Downtown Hub</span>
-                <span className="font-semibold text-emerald-800">92% Occupied</span>
-              </div>
-              <div className="flex justify-between items-center pb-2 border-b border-gray-100">
-                <span>Westside Commons</span>
-                <span className="font-semibold text-emerald-800">84% Occupied</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>Tech District</span>
-                <span className="font-semibold text-amber-700">71% Occupied</span>
-              </div>
+              {locations.slice(0, 4).map((loc) => (
+                <div
+                  key={loc.id}
+                  className="flex justify-between items-center pb-2 border-b border-gray-100 last:border-b-0 last:pb-0"
+                >
+                  <div className="truncate pr-2">
+                    <span className="font-medium text-gray-900">{loc.name}</span>
+                    <span className="block text-[10px] text-gray-400">{loc.totalCapacity} desks capacity</span>
+                  </div>
+                  <span
+                    className={`font-semibold shrink-0 ${
+                      loc.currentOccupancyRate >= 80
+                        ? "text-emerald-800"
+                        : loc.currentOccupancyRate >= 60
+                        ? "text-amber-700"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    {loc.currentOccupancyRate}% Occupied
+                  </span>
+                </div>
+              ))}
             </div>
             <p className="text-[11px] text-gray-400 mt-3 pt-3 border-t border-gray-100">
               Full space reservation and conflict-free booking engine arrives in <strong>Phase 4</strong>.

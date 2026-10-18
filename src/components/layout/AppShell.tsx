@@ -16,6 +16,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     setSelectedLocation,
     addLead,
     leads,
+    locations,
   } = useWorkNest();
 
   return (
@@ -37,6 +38,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             onOpenNewLead={() => setIsNewLeadModalOpen(true)}
             selectedLocation={selectedLocation}
             onLocationChange={setSelectedLocation}
+            locations={locations}
           />
 
           <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
