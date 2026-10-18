@@ -47,16 +47,14 @@ const NAV_ITEMS = [
     href: "/bookings",
     icon: CalendarCheck2,
     phase: "Phase 4",
-    available: false,
-    badge: "Phase 4",
+    available: true,
   },
   {
     name: "Spaces & Inventory",
     href: "/spaces",
     icon: Building2,
     phase: "Phase 4",
-    available: false,
-    badge: "Phase 4",
+    available: true,
   },
   {
     name: "Invoices & Billing",

@@ -476,8 +476,15 @@ All endpoints must authenticate as needed, authorize every record access, valida
 - [x] Local storage persistence for members and memberships across page refreshes.
 - [ ] Member activity history & guest check-in linking.
 
-### Phase 4 — Booking operations
-- Model locations/spaces, availability, tours, bookings, check-in, and conflict prevention.
+### Phase 4 — Space Inventory & Booking Operations (COMPLETED)
+- [x] Model room and space inventory types (`SpaceType`, `Space`, capacity, hourlyRate in INR, amenities, floorOrZone).
+- [x] Spaces & Inventory interface (`/spaces`) with quick KPI metrics, search, type, and active status filtering.
+- [x] Space management modal (`SpaceModal`) for creating, updating, and deactivating rooms and desk bays.
+- [x] Conflict prevention engine (`checkBookingConflict`) rejecting overlapping time slots for the same space and date.
+- [x] Reservation scheduling modal (`BookingModal`) with real-time conflict detector, capacity alerts, duration/cost calculator, and member/lead linking.
+- [x] Bookings & Tours management dashboard (`/bookings`) with check-in, complete, cancel, and status tracking.
+- [x] Local storage persistence for spaces and bookings across browser sessions.
+- [x] Automated Vitest test suite covering conflict prevention and directory workflows.
 
 ### Phase 5 — Billing and automation
 - Add invoices, payment-provider integration, webhook verification, reminders, and renewal alerts.
