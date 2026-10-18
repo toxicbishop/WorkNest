@@ -8,7 +8,7 @@
 ![pnpm](https://img.shields.io/badge/pnpm-12.3.4-%234a4a4a.svg?style=flat&logo=pnpm&logoColor=f69220)
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)
 ![WCAG](https://img.shields.io/badge/Accessibility-WCAG_2.2_AA-059669?style=flat)
-![Status](https://img.shields.io/badge/Release-Phase_4_Spaces_&_Bookings-20382F?style=flat)
+![Status](https://img.shields.io/badge/Release-Phase_5_Billing_&_Automation-20382F?style=flat)
 
 ![WorkNest Dashboard](public/dashboard.png)
 

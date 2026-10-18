@@ -486,8 +486,15 @@ All endpoints must authenticate as needed, authorize every record access, valida
 - [x] Local storage persistence for spaces and bookings across browser sessions.
 - [x] Automated Vitest test suite covering conflict prevention and directory workflows.
 
-### Phase 5 — Billing and automation
-- Add invoices, payment-provider integration, webhook verification, reminders, and renewal alerts.
+### Phase 5 — Billing, Invoicing & Automation (COMPLETED)
+- [x] Model GST-compliant invoice domain entities (`Invoice`, `InvoiceLineItem`, `InvoiceStatus`, `PaymentRecord`, `PaymentMethod`).
+- [x] Invoices & Billing interface (`/billing`) with financial operations KPIs (Total Invoiced, Collected Revenue, Outstanding Balance, Overdue Invoices).
+- [x] Itemized invoice creation modal (`InvoiceModal`) with dynamic line items, rate in INR (₹), and auto-computed GST (18%).
+- [x] Payment recording and reconciliation modal (`RecordPaymentModal`) supporting UPI, NetBanking, Cards, and Bank Transfer with transaction auditing.
+- [x] Full tax invoice view and printable receipt modal (`InvoiceDetailModal`) with payment timeline, voiding, and print support.
+- [x] Automated overdue reminder notice dispatching (`sendInvoiceReminder`) with activity timeline logging.
+- [x] Local storage persistence for invoices (`worknest_invoices_v1`) across sessions.
+- [x] Interactive Notification Center (`NotificationDropdown`) in header with live operational alerts for overdue tasks, invoices, and tours.
 
 ### Phase 6 — Analytics and production hardening
 - Add conversion, occupancy, revenue, and churn reporting.

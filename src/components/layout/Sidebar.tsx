@@ -20,7 +20,16 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-const NAV_ITEMS = [
+interface NavItem {
+  name: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  phase: string;
+  available: boolean;
+  badge?: string;
+}
+
+const NAV_ITEMS: NavItem[] = [
   {
     name: "Dashboard",
     href: "/",
@@ -61,8 +70,7 @@ const NAV_ITEMS = [
     href: "/billing",
     icon: Receipt,
     phase: "Phase 5",
-    available: false,
-    badge: "Phase 5",
+    available: true,
   },
   {
     name: "Settings",

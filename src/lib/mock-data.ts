@@ -10,6 +10,7 @@ import {
   Membership,
   Space,
   Booking,
+  Invoice,
 } from "@/types";
 
 export const INITIAL_LEADS: Lead[] = [
@@ -743,6 +744,196 @@ export const INITIAL_BOOKINGS: Booking[] = [
     totalCostCents: 180000, // ₹1,800
     creditsUsedHours: 1.5,
     createdAt: "2026-10-16T16:00:00Z",
+  },
+];
+
+export const INITIAL_INVOICES: Invoice[] = [
+  {
+    id: "inv-1",
+    invoiceNumber: "INV-2026-001",
+    memberId: "mbr-1",
+    memberName: "Dr. Priya Patel",
+    memberEmail: "priya.patel@nexuslegal.com",
+    companyName: "Nexus Legal Partners",
+    locationName: "Downtown Hub",
+    membershipId: "mship-1",
+    issueDate: "2026-10-01",
+    dueDate: "2026-10-15",
+    status: "Paid",
+    currency: "INR",
+    lineItems: [
+      {
+        id: "li-1-1",
+        description: "Private Office Suite (4 Seats) - Monthly Fee",
+        quantity: 1,
+        unitPriceCents: 2800000, // ₹28,000
+        amountCents: 2800000,
+      },
+    ],
+    subtotalCents: 2800000,
+    taxRatePercent: 18,
+    taxAmountCents: 504000, // ₹5,040
+    totalAmountCents: 3304000, // ₹33,040
+    paidAmountCents: 3304000,
+    paymentRecords: [
+      {
+        id: "pay-1",
+        invoiceId: "inv-1",
+        amountCents: 3304000,
+        paymentMethod: "UPI / NetBanking",
+        transactionRef: "UPI-HDFC-984021948",
+        paidAt: "2026-10-05T10:30:00Z",
+        notes: "Auto-reconciled via HDFC UPI Gateway webhook.",
+      },
+    ],
+    createdAt: "2026-10-01T00:00:00Z",
+  },
+  {
+    id: "inv-2",
+    invoiceNumber: "INV-2026-002",
+    memberId: "mbr-2",
+    memberName: "Vikram Malhotra",
+    memberEmail: "vikram@malhotratech.in",
+    companyName: "Malhotra Cloud Systems",
+    locationName: "Westside Commons",
+    membershipId: "mship-2",
+    issueDate: "2026-10-01",
+    dueDate: "2026-10-15",
+    status: "Paid",
+    currency: "INR",
+    lineItems: [
+      {
+        id: "li-2-1",
+        description: "Dedicated Desk - Monthly Recurring Subscription",
+        quantity: 1,
+        unitPriceCents: 1150000, // ₹11,500
+        amountCents: 1150000,
+      },
+    ],
+    subtotalCents: 1150000,
+    taxRatePercent: 18,
+    taxAmountCents: 207000,
+    totalAmountCents: 1357000, // ₹13,570
+    paidAmountCents: 1357000,
+    paymentRecords: [
+      {
+        id: "pay-2",
+        invoiceId: "inv-2",
+        amountCents: 1357000,
+        paymentMethod: "Bank Transfer",
+        transactionRef: "NEFT-ICICI-8839201",
+        paidAt: "2026-10-03T14:15:00Z",
+      },
+    ],
+    createdAt: "2026-10-01T00:00:00Z",
+  },
+  {
+    id: "inv-3",
+    invoiceNumber: "INV-2026-003",
+    memberId: "mbr-3",
+    memberName: "Ananya Deshmukh",
+    memberEmail: "ananya@indiedesign.studio",
+    companyName: "Indie Design Collective",
+    locationName: "Downtown Hub",
+    membershipId: "mship-3",
+    issueDate: "2026-10-05",
+    dueDate: "2026-10-25",
+    status: "Open",
+    currency: "INR",
+    lineItems: [
+      {
+        id: "li-3-1",
+        description: "Flex Hot Desk - Monthly Membership",
+        quantity: 1,
+        unitPriceCents: 650000, // ₹6,500
+        amountCents: 650000,
+      },
+      {
+        id: "li-3-2",
+        description: "Kaveri Boardroom (1.5 hrs overage above monthly credits)",
+        quantity: 1,
+        unitPriceCents: 180000, // ₹1,800
+        amountCents: 180000,
+      },
+    ],
+    subtotalCents: 830000,
+    taxRatePercent: 18,
+    taxAmountCents: 149400,
+    totalAmountCents: 979400, // ₹9,794
+    paidAmountCents: 0,
+    paymentRecords: [],
+    createdAt: "2026-10-05T09:00:00Z",
+    notes: "Monthly membership + overage room charges.",
+  },
+  {
+    id: "inv-4",
+    invoiceNumber: "INV-2026-004",
+    memberId: "mbr-4",
+    memberName: "Raghav Sharma",
+    memberEmail: "r.sharma@apexrobotics.co",
+    companyName: "Apex Robotics India",
+    locationName: "Tech District",
+    membershipId: "mship-4",
+    bookingId: "bkg-4",
+    issueDate: "2026-10-10",
+    dueDate: "2026-10-24",
+    status: "Open",
+    currency: "INR",
+    lineItems: [
+      {
+        id: "li-4-1",
+        description: "Enterprise Team Suite (12 Seats) - Monthly Retainer",
+        quantity: 1,
+        unitPriceCents: 7500000, // ₹75,000
+        amountCents: 7500000,
+      },
+      {
+        id: "li-4-2",
+        description: "Brahmaputra Townhall Arena - Robotics Demo Night (4 hrs)",
+        quantity: 1,
+        unitPriceCents: 4000000, // ₹40,000
+        amountCents: 4000000,
+      },
+    ],
+    subtotalCents: 11500000,
+    taxRatePercent: 18,
+    taxAmountCents: 2070000,
+    totalAmountCents: 13570000, // ₹1,35,700
+    paidAmountCents: 0,
+    paymentRecords: [],
+    createdAt: "2026-10-10T12:00:00Z",
+    notes: "Corporate quarterly package with auditorium booking.",
+  },
+  {
+    id: "inv-5",
+    invoiceNumber: "INV-2026-005",
+    memberId: "mbr-5",
+    memberName: "Siddharth Rao",
+    memberEmail: "sid@raoenterprises.net",
+    companyName: "Rao Global Trade",
+    locationName: "Westside Commons",
+    membershipId: "mship-5",
+    issueDate: "2026-09-01",
+    dueDate: "2026-09-15",
+    status: "Overdue",
+    currency: "INR",
+    lineItems: [
+      {
+        id: "li-5-1",
+        description: "Virtual Business Office & Mail Handling",
+        quantity: 1,
+        unitPriceCents: 300000, // ₹3,000
+        amountCents: 300000,
+      },
+    ],
+    subtotalCents: 300000,
+    taxRatePercent: 18,
+    taxAmountCents: 54000,
+    totalAmountCents: 354000, // ₹3,540
+    paidAmountCents: 0,
+    paymentRecords: [],
+    createdAt: "2026-09-01T00:00:00Z",
+    notes: "First notice sent on Sept 20. Second notice sent Oct 01.",
   },
 ];
 

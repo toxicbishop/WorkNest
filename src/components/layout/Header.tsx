@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { Menu, Plus, MapPin, Bell } from "lucide-react";
+import { Menu, Plus, MapPin } from "lucide-react";
+import { NotificationDropdown } from "@/components/layout/NotificationDropdown";
 
 interface HeaderProps {
   onOpenSidebar: () => void;
@@ -53,15 +53,7 @@ export function Header({
       </div>
 
       <div className="flex items-center gap-3">
-        <button
-          type="button"
-          className="relative p-2 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 focus:outline-hidden focus:ring-2 focus:ring-[#20382F]"
-          aria-label="Notifications"
-          title="3 active notifications"
-        >
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-600 ring-2 ring-white" />
-        </button>
+        <NotificationDropdown />
 
         {onOpenNewLead && (
           <button
