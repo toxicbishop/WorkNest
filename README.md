@@ -5,6 +5,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-%23007ACC?style=flat&logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
 ![Vitest](https://img.shields.io/badge/Tests-Vitest-6E9F18?style=flat&logo=vitest&logoColor=white)
+![pnpm](https://img.shields.io/badge/pnpm-12.3.4-%234a4a4a.svg?style=flat&logo=pnpm&logoColor=f69220)
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)
 ![WCAG](https://img.shields.io/badge/Accessibility-WCAG_2.2_AA-059669?style=flat)
 ![Status](https://img.shields.io/badge/Release-Phase_1_Frontend_Foundation-20382F?style=flat)
@@ -99,7 +100,7 @@ WorkNest/
 
 ### Prerequisites
 - **Node.js**: `v20+` (Tested on `v24.16`)
-- **npm**: `v10+`
+- **pnpm**: `v9+` (Tested on `v12.3.4`)
 
 ### Installation
 ```bash
@@ -108,12 +109,12 @@ git clone https://github.com/toxicbishop/WorkNest.git
 cd WorkNest
 
 # Install dependencies
-npm install
+pnpm install
 ```
 
 ### Running Locally
 ```bash
-npm run dev
+pnpm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
@@ -123,12 +124,12 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 | Command | Description |
 | :--- | :--- |
-| `npm run dev` | Starts local Next.js development server with hot-reload |
-| `npm run build` | Builds optimized production bundle via Turbopack |
-| `npm run start` | Starts production server |
-| `npm run lint` | Runs ESLint 9 checks |
-| `npm run typecheck`| Validates TypeScript across all modules (`tsc --noEmit`) |
-| `npm run test` | Runs unit & component tests using Vitest |
+| `pnpm dev` | Starts local Next.js development server with hot-reload |
+| `pnpm build` | Builds optimized production bundle via Turbopack |
+| `pnpm start` | Starts production server |
+| `pnpm lint` | Runs ESLint 9 checks |
+| `pnpm typecheck`| Validates TypeScript across all modules (`tsc --noEmit`) |
+| `pnpm test` | Runs unit & component tests using Vitest |
 
 ---
 

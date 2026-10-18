@@ -1,6 +1,6 @@
 version: 2
 updates:
-  # Maintain dependencies for npm
+  # Maintain pnpm dependencies via pnpm-lock.yaml
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
