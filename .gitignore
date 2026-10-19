@@ -39,9 +39,17 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Agents
+# Agents/Skills
 AGENTS.md
-
+.agents/
+.aider-desk/
+.augment/
+.autohand/
+.bob/
+.claude/
+.data/
+.skills/
+skills-lock.json
 # Server / Python
 .venv/
 */.venv/
