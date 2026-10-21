@@ -613,7 +613,7 @@ function BookingFormInner({
                   <input
                     type="email"
                     required={!isLinkedMember}
-                    placeholder="e.g. rahul@example.com"
+                    placeholder="e.g. rahul@lumina-ai.dev"
                     value={customEmail}
                     onChange={(e) => {
                       setCustomEmail(e.target.value);

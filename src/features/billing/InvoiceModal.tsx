@@ -345,7 +345,7 @@ function InvoiceFormInner({
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Acme Corp"
+                    placeholder="e.g. Vance Architecture Ltd"
                     value={customCompany}
                     onChange={(e) => setCustomCompany(e.target.value)}
                     className="w-full px-3 py-2 border border-neutral-200 rounded-lg bg-white"
