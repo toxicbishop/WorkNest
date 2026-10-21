@@ -44,7 +44,7 @@ export function InvoiceDetailModal({
       case "Open":
         return "bg-blue-50 text-blue-700 border-blue-200";
       case "Partially Paid":
-        return "bg-indigo-50 text-indigo-700 border-indigo-200";
+        return "bg-sky-50 text-sky-700 border-sky-200";
       case "Overdue":
         return "bg-amber-50 text-amber-700 border-amber-200";
       case "Void":
@@ -52,7 +52,7 @@ export function InvoiceDetailModal({
       case "Draft":
         return "bg-neutral-50 text-neutral-600 border-neutral-200";
       case "Refunded":
-        return "bg-purple-50 text-purple-700 border-purple-200";
+        return "bg-emerald-50 text-emerald-700 border-emerald-200";
       default:
         return "bg-neutral-100 text-neutral-700 border-neutral-200";
     }
@@ -77,9 +77,9 @@ export function InvoiceDetailModal({
       aria-modal="true"
       aria-labelledby="invoice-detail-title"
     >
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl border border-neutral-200 overflow-hidden flex flex-col max-h-[92vh]">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl border border-neutral-200 overflow-hidden flex flex-col max-h-[92vh]" data-ui="overlay">
         {/* Top Control Bar (Non-Printable) */}
-        <div className="px-6 py-3 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/70 print:hidden">
+        <div className="px-6 py-3 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/70 print:hidden" data-ui="ui-frame">
           <div className="flex items-center gap-2">
             <span
               className={`text-xs px-2.5 py-0.5 rounded-full font-semibold border ${getStatusBadge(
@@ -106,7 +106,7 @@ export function InvoiceDetailModal({
             {balanceDueCents > 0 && invoice.status !== "Void" && (
               <button
                 onClick={() => onOpenRecordPayment(invoice)}
-                className="px-3 py-1 bg-emerald-700 hover:bg-emerald-800 text-white rounded-md text-xs font-medium flex items-center gap-1 shadow-sm transition-colors"
+                className="px-3 py-1 bg-emerald-700 hover:bg-emerald-800 text-white rounded-md text-xs font-medium flex items-center gap-1  transition-colors"
               >
                 <CreditCard className="w-3.5 h-3.5" />
                 <span>Record Payment</span>
@@ -133,7 +133,7 @@ export function InvoiceDetailModal({
           )}
 
           {/* Invoice Header */}
-          <div className="flex items-start justify-between border-b border-neutral-200 pb-6">
+          <div className="flex items-start justify-between border-b border-neutral-200 pb-6" data-ui="ui-frame">
             <div>
               <div className="flex items-center gap-2 text-[#20382F] font-bold text-lg mb-1">
                 <Receipt className="w-5 h-5" />
@@ -173,7 +173,7 @@ export function InvoiceDetailModal({
           {/* Billed To / Hub Info */}
           <div className="grid grid-cols-2 gap-6 bg-neutral-50 p-4 rounded-lg border border-neutral-200/80">
             <div>
-              <div className="text-[10px] font-semibold text-neutral-400 uppercase tracking-wider mb-1">
+              <div className="text-[10px] font-semibold text-neutral-400 font-semibold mb-1">
                 Billed To
               </div>
               <div className="font-bold text-neutral-900 text-sm">{invoice.memberName}</div>
@@ -184,7 +184,7 @@ export function InvoiceDetailModal({
             </div>
 
             <div>
-              <div className="text-[10px] font-semibold text-neutral-400 uppercase tracking-wider mb-1">
+              <div className="text-[10px] font-semibold text-neutral-400 font-semibold mb-1">
                 Servicing Hub
               </div>
               <div className="font-semibold text-neutral-900">{invoice.locationName}</div>
@@ -202,14 +202,14 @@ export function InvoiceDetailModal({
           <div className="border border-neutral-200 rounded-lg overflow-hidden">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="bg-neutral-100/70 border-b border-neutral-200 text-neutral-600 font-semibold">
+                <tr className="bg-neutral-100/70 border-b border-neutral-200 text-neutral-600 font-semibold" data-ui="ui-frame">
                   <th className="py-2.5 px-4">Item & Description</th>
                   <th className="py-2.5 px-3 text-center w-16">Qty</th>
                   <th className="py-2.5 px-4 text-right w-28">Rate</th>
                   <th className="py-2.5 px-4 text-right w-32">Amount</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-100">
+              <tbody className="divide-y divide-neutral-100" data-ui="ui-list">
                 {invoice.lineItems.map((item, idx) => (
                   <tr key={item.id || idx}>
                     <td className="py-3 px-4">
@@ -245,7 +245,7 @@ export function InvoiceDetailModal({
                   {formatCurrency(invoice.taxAmountCents, "INR")}
                 </span>
               </div>
-              <div className="flex justify-between text-sm font-bold text-neutral-900 pt-2 border-t border-neutral-200">
+              <div className="flex justify-between text-sm font-bold text-neutral-900 pt-2 border-t border-neutral-200" data-ui="ui-frame">
                 <span>Total Amount:</span>
                 <span className="text-[#20382F]">
                   {formatCurrency(invoice.totalAmountCents, "INR")}
@@ -257,7 +257,7 @@ export function InvoiceDetailModal({
                   {formatCurrency(invoice.paidAmountCents, "INR")}
                 </span>
               </div>
-              <div className="flex justify-between text-sm font-bold pt-2 border-t border-neutral-200 text-amber-800">
+              <div className="flex justify-between text-sm font-bold pt-2 border-t border-neutral-200 text-amber-800" data-ui="ui-frame">
                 <span>Balance Due:</span>
                 <span>{formatCurrency(balanceDueCents, "INR")}</span>
               </div>
@@ -266,12 +266,12 @@ export function InvoiceDetailModal({
 
           {/* Payment History Timeline */}
           {invoice.paymentRecords && invoice.paymentRecords.length > 0 && (
-            <div className="space-y-2 border-t border-neutral-200 pt-4">
+            <div className="space-y-2 border-t border-neutral-200 pt-4" data-ui="ui-frame">
               <div className="text-xs font-semibold text-neutral-800 flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 text-neutral-500" />
                 Payment & Reconciliation History
               </div>
-              <div className="bg-neutral-50 rounded-lg border border-neutral-200 divide-y divide-neutral-100">
+              <div className="bg-neutral-50 rounded-lg border border-neutral-200 divide-y divide-neutral-100" data-ui="ui-list">
                 {invoice.paymentRecords.map((pay) => (
                   <div
                     key={pay.id}
@@ -280,7 +280,7 @@ export function InvoiceDetailModal({
                     <div>
                       <div className="font-semibold text-neutral-900 flex items-center gap-2">
                         <span>{pay.paymentMethod}</span>
-                        <span className="text-[10px] text-neutral-500 font-mono bg-white px-1.5 py-0.5 rounded border border-neutral-200">
+                        <span className="text-[10px] text-neutral-500 tabular-nums bg-white px-1.5 py-0.5 rounded border border-neutral-200">
                           {pay.transactionRef}
                         </span>
                       </div>
@@ -314,7 +314,7 @@ export function InvoiceDetailModal({
         </div>
 
         {/* Footer Actions (Non-Printable) */}
-        <div className="px-6 py-3 border-t border-neutral-100 bg-neutral-50 flex items-center justify-between text-xs print:hidden">
+        <div className="px-6 py-3 border-t border-neutral-100 bg-neutral-50 flex items-center justify-between text-xs print:hidden" data-ui="ui-frame">
           <div className="flex items-center gap-2">
             {invoice.status !== "Void" && (
               <button

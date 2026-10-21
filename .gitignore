@@ -49,6 +49,7 @@ AGENTS.md
 .claude/
 .data/
 .skills/
+.taste-skill/
 skills-lock.json
 # Server / Python
 .venv/

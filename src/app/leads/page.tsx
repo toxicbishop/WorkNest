@@ -44,7 +44,7 @@ export default function LeadsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-gray-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-gray-200" data-ui="ui-frame">
         <div>
           <div className="flex items-center gap-2">
             <Users2 className="w-5 h-5 text-emerald-800" />
@@ -60,7 +60,7 @@ export default function LeadsPage() {
         <button
           type="button"
           onClick={handleOpenNewLead}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-[#20382F] hover:bg-[#172A23] px-3.5 py-2 rounded-lg transition-colors shadow-xs"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-[#20382F] hover:bg-[#172A23] px-3.5 py-2 rounded-lg transition-colors "
         >
           <Plus className="w-4 h-4" />
           <span>New Lead Inquiry</span>

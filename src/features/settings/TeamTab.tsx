@@ -110,11 +110,11 @@ export function TeamTab({
         </button>
       </div>
 
-      <div className="bg-white border border-[#E5E7EB] rounded-xl overflow-hidden shadow-xs">
+      <div className="bg-white border border-[#E5E7EB] rounded-xl overflow-hidden ">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-[#F7F8F6] border-b border-[#E5E7EB] text-[#5A6860] font-medium">
+              <tr className="bg-[#F7F8F6] border-b border-[#E5E7EB] text-[#5A6860] font-medium" data-ui="ui-frame">
                 <th scope="col" className="px-5 py-3.5">Staff Member</th>
                 <th scope="col" className="px-5 py-3.5">System Role</th>
                 <th scope="col" className="px-5 py-3.5">Assigned Location</th>
@@ -122,7 +122,7 @@ export function TeamTab({
                 <th scope="col" className="px-5 py-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 text-[#1E2922]">
+            <tbody className="divide-y divide-gray-100 text-[#1E2922]" data-ui="ui-list">
               {staff.map((member) => (
                 <tr key={member.id} className="hover:bg-gray-50/70 transition-colors">
                   <td className="px-5 py-3.5">
@@ -194,8 +194,8 @@ export function TeamTab({
           aria-modal="true"
           aria-labelledby="team-modal-title"
         >
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full border border-gray-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#F7F8F6]">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full border border-gray-200 overflow-hidden" data-ui="overlay">
+            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#F7F8F6]" data-ui="ui-frame">
               <div className="flex items-center gap-2">
                 <Users2 className="w-5 h-5 text-[#20382F]" />
                 <h3 id="team-modal-title" className="text-sm font-semibold text-[#1E2922]">
@@ -297,7 +297,7 @@ export function TeamTab({
                 </select>
               </div>
 
-              <div className="pt-4 border-t border-gray-100 flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-gray-100 flex items-center justify-end gap-3" data-ui="ui-frame">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}

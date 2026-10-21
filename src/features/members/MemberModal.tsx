@@ -105,8 +105,8 @@ export function MemberModal({
       aria-modal="true"
       aria-labelledby="member-modal-title"
     >
-      <div className="bg-white rounded-xl shadow-xl max-w-lg w-full border border-gray-200 overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#F7F8F6]">
+      <div className="bg-white rounded-xl shadow-xl max-w-lg w-full border border-gray-200 overflow-hidden" data-ui="overlay">
+        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#F7F8F6]" data-ui="ui-frame">
           <div className="flex items-center gap-2">
             <UserPlus className="w-5 h-5 text-[#20382F]" />
             <h3 id="member-modal-title" className="text-sm font-semibold text-[#1E2922]">
@@ -314,7 +314,7 @@ export function MemberModal({
             </div>
           </div>
 
-          <div className="pt-4 border-t border-gray-100 flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-gray-100 flex items-center justify-end gap-3" data-ui="ui-frame">
             <button
               type="button"
               onClick={onClose}

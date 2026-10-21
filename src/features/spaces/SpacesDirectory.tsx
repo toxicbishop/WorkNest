@@ -140,16 +140,16 @@ export function SpacesDirectory() {
 
         <div className="bg-white p-4 rounded-xl border border-neutral-200">
           <div className="flex items-center gap-2 text-xs text-neutral-500 mb-1">
-            <Users className="w-4 h-4 text-indigo-600" />
+            <Users className="w-4 h-4 text-sky-600" />
             <span>Total Seat Capacity</span>
           </div>
-          <div className="text-2xl font-bold text-indigo-700">{totalCapacity}</div>
+          <div className="text-2xl font-bold text-sky-700">{totalCapacity}</div>
           <div className="text-[11px] text-neutral-500 mt-0.5">People simultaneously</div>
         </div>
       </div>
 
       {/* Filter and Control Bar */}
-      <div className="bg-white p-4 rounded-xl border border-neutral-200 shadow-sm flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+      <div className="bg-white p-4 rounded-xl border border-neutral-200  flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
         <div className="flex flex-1 flex-col sm:flex-row gap-3 items-stretch sm:items-center">
           {/* Search Box */}
           <div className="relative flex-1">
@@ -215,7 +215,7 @@ export function SpacesDirectory() {
 
           <button
             onClick={handleOpenAdd}
-            className="flex items-center gap-1.5 px-4 py-2 bg-[#20382F] hover:bg-[#162720] text-white text-xs font-medium rounded-lg transition-colors shadow-sm"
+            className="flex items-center gap-1.5 px-4 py-2 bg-[#20382F] hover:bg-[#162720] text-white text-xs font-medium rounded-lg transition-colors "
           >
             <Plus className="w-4 h-4" />
             Add Space

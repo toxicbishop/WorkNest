@@ -31,7 +31,7 @@ export function MetricCards({ metrics }: MetricCardsProps) {
       definition: metrics.definitionNotes.toursScheduled,
       icon: Calendar,
       trend: "Scheduled walkthroughs",
-      color: "text-purple-700 bg-purple-50 border-purple-200",
+      color: "text-emerald-700 bg-emerald-50 border-emerald-200",
     },
     {
       title: "Recognized MRR",
@@ -50,7 +50,7 @@ export function MetricCards({ metrics }: MetricCardsProps) {
         return (
           <div
             key={card.title}
-            className="bg-white rounded-xl border border-[#E5E7EB] p-5 shadow-xs relative flex flex-col justify-between"
+            className="bg-white rounded-xl border border-[#E5E7EB] p-5  relative flex flex-col justify-between"
           >
             <div className="flex items-start justify-between">
               <div>
@@ -72,9 +72,9 @@ export function MetricCards({ metrics }: MetricCardsProps) {
               </div>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
+            <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500" data-ui="ui-frame">
               <span>{card.trend}</span>
-              <span className="font-mono text-[10px] text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded">
+              <span className="tabular-nums text-[10px] text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded">
                 DEMO
               </span>
             </div>

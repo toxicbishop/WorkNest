@@ -19,7 +19,7 @@ export function Header({
   locations = [],
 }: HeaderProps) {
   return (
-    <header className="h-16 bg-white border-b border-[#E5E7EB] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
+    <header className="h-16 bg-white border-b border-[#E5E7EB] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30" data-ui="ui-frame">
       <div className="flex items-center gap-3">
         <button
           type="button"
@@ -59,7 +59,7 @@ export function Header({
           <button
             type="button"
             onClick={onOpenNewLead}
-            className="inline-flex items-center gap-1.5 bg-[#20382F] hover:bg-[#172A23] text-white text-xs font-semibold px-3 py-2 rounded-lg shadow-xs transition-colors focus:outline-hidden focus:ring-2 focus:ring-[#20382F] focus:ring-offset-2"
+            className="inline-flex items-center gap-1.5 bg-[#20382F] hover:bg-[#172A23] text-white text-xs font-semibold px-3 py-2 rounded-lg  transition-colors focus:outline-hidden focus:ring-2 focus:ring-[#20382F] focus:ring-offset-2"
           >
             <Plus className="w-4 h-4" />
             <span className="hidden sm:inline">New Lead</span>

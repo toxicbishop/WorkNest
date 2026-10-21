@@ -56,7 +56,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-gray-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-gray-200" data-ui="ui-frame">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#1E2922]">
             Operations Dashboard
@@ -73,7 +73,7 @@ export default function DashboardPage() {
         <div className="flex items-center gap-2">
           <Link
             href="/leads"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg transition-colors shadow-2xs"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-700 bg-white hover:bg-gray-50 border border-gray-300 px-3 py-2 rounded-lg transition-colors "
           >
             <span>View Full Pipeline</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -81,7 +81,7 @@ export default function DashboardPage() {
           <button
             type="button"
             onClick={handleOpenNewLead}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-[#20382F] hover:bg-[#172A23] px-3.5 py-2 rounded-lg transition-colors shadow-xs"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-[#20382F] hover:bg-[#172A23] px-3.5 py-2 rounded-lg transition-colors "
           >
             <Plus className="w-4 h-4" />
             <span>Add Lead</span>
@@ -133,11 +133,11 @@ export default function DashboardPage() {
           />
 
           {/* Location Quick Glance */}
-          <div className="bg-white rounded-xl border border-[#E5E7EB] p-5 shadow-xs">
+          <div className="bg-white rounded-xl border border-[#E5E7EB] p-5 ">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Building className="w-4 h-4 text-[#20382F]" />
-                <h3 className="text-xs font-semibold text-gray-900 uppercase tracking-wider">
+                <h3 className="text-xs font-semibold text-gray-900 font-semibold">
                   Locations & Capacity
                 </h3>
               </div>
@@ -152,7 +152,7 @@ export default function DashboardPage() {
               {locations.slice(0, 4).map((loc) => (
                 <div
                   key={loc.id}
-                  className="flex justify-between items-center pb-2 border-b border-gray-100 last:border-b-0 last:pb-0"
+                  className="flex justify-between items-center pb-2 border-b border-gray-100 last:border-b-0 last:pb-0" data-ui="ui-frame"
                 >
                   <div className="truncate pr-2">
                     <span className="font-medium text-gray-900">{loc.name}</span>
@@ -172,8 +172,8 @@ export default function DashboardPage() {
                 </div>
               ))}
             </div>
-            <p className="text-[11px] text-gray-400 mt-3 pt-3 border-t border-gray-100">
-              Full space reservation and conflict-free booking engine arrives in <strong>Phase 4</strong>.
+            <p className="text-[11px] text-gray-400 mt-3 pt-3 border-t border-gray-100" data-ui="ui-frame">
+              Full space reservation and conflict-free booking engine arrives in <strong>Scheduled</strong>.
             </p>
           </div>
         </div>

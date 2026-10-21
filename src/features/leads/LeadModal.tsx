@@ -113,9 +113,9 @@ function LeadFormInner({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-xl max-w-lg w-full border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-xl shadow-xl max-w-lg w-full border border-gray-200 overflow-hidden" data-ui="overlay">
       {/* Modal Header */}
-      <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#F7F8F6]">
+      <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#F7F8F6]" data-ui="ui-frame">
         <h2 id="modal-title" className="text-base font-semibold text-[#1E2922]">
           {initialLead ? "Edit Lead Details" : "Create New Lead Inquiry"}
         </h2>
@@ -351,7 +351,7 @@ function LeadFormInner({
         </div>
 
         {/* Actions */}
-        <div className="pt-2 border-t border-gray-100 flex items-center justify-end gap-3">
+        <div className="pt-2 border-t border-gray-100 flex items-center justify-end gap-3" data-ui="ui-frame">
           <button
             type="button"
             onClick={onClose}
@@ -363,7 +363,7 @@ function LeadFormInner({
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-4 py-2 text-xs font-semibold text-white bg-[#20382F] hover:bg-[#172A23] rounded-lg shadow-xs transition-colors focus:outline-hidden focus:ring-2 focus:ring-[#20382F]"
+            className="px-4 py-2 text-xs font-semibold text-white bg-[#20382F] hover:bg-[#172A23] rounded-lg  transition-colors focus:outline-hidden focus:ring-2 focus:ring-[#20382F]"
           >
             {isSubmitting ? "Saving..." : initialLead ? "Update Lead" : "Create Lead"}
           </button>

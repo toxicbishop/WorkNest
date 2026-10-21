@@ -40,7 +40,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Settings Navigation Tabs */}
-      <div className="border-b border-[#E5E7EB] flex items-center gap-2 overflow-x-auto">
+      <div className="border-b border-[#E5E7EB] flex items-center gap-2 overflow-x-auto" data-ui="ui-frame">
         <button
           type="button"
           onClick={() => setActiveTab("locations")}

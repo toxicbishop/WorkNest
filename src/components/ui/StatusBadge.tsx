@@ -27,10 +27,10 @@ const statusConfig: Record<
   },
   "Tour Booked": {
     label: "Tour Booked",
-    bg: "bg-purple-50",
-    text: "text-purple-700",
-    dot: "bg-purple-500",
-    border: "border-purple-200",
+    bg: "bg-emerald-50",
+    text: "text-emerald-700",
+    dot: "bg-emerald-500",
+    border: "border-emerald-200",
   },
   Converted: {
     label: "Converted",

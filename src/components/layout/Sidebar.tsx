@@ -112,7 +112,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         aria-label="Main Navigation"
       >
         {/* Brand header */}
-        <div className="h-16 flex items-center justify-between px-6 border-b border-white/10">
+        <div className="h-16 flex items-center justify-between px-6 border-b border-white/10" data-ui="ui-frame">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-300 font-bold">
               W
@@ -121,7 +121,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               <span className="font-semibold tracking-tight text-lg text-white">
                 WorkNest
               </span>
-              <span className="ml-1 text-[10px] text-emerald-400 font-medium uppercase tracking-wider">
+              <span className="ml-1 text-[10px] text-emerald-400 font-medium font-semibold">
                 CRM
               </span>
             </div>
@@ -137,8 +137,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
 
         {/* Location switcher mock context */}
-        <div className="px-4 py-3 border-b border-white/10 bg-black/15">
-          <label className="text-[11px] font-medium text-gray-300 block mb-1 uppercase tracking-wider">
+        <div className="px-4 py-3 border-b border-white/10 bg-black/15" data-ui="ui-frame">
+          <label className="text-[11px] font-medium text-gray-300 block mb-1 font-semibold">
             Workspace Scope
           </label>
           <div className="flex items-center justify-between text-xs text-emerald-200 bg-white/5 border border-white/10 rounded px-2.5 py-1.5">
@@ -149,7 +149,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
         {/* Navigation items */}
         <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-          <div className="px-3 pb-2 text-[11px] font-medium text-gray-400 uppercase tracking-wider">
+          <div className="px-3 pb-2 text-[11px] font-medium text-gray-400 font-semibold">
             Operations
           </div>
           {NAV_ITEMS.map((item) => {
@@ -205,7 +205,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         </nav>
 
         {/* Footer profile info */}
-        <div className="p-4 border-t border-white/10 bg-black/20">
+        <div className="p-4 border-t border-white/10 bg-black/20" data-ui="ui-frame">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-emerald-700/60 flex items-center justify-center text-xs font-semibold text-emerald-100 border border-emerald-500/30">
               MV
