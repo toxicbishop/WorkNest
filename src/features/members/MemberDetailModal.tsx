@@ -69,9 +69,9 @@ export function MemberDetailModal({
       aria-modal="true"
       aria-labelledby="member-detail-title"
     >
-      <div className="bg-white rounded-xl shadow-xl max-w-xl w-full border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-xl max-w-xl w-full border border-gray-200 overflow-hidden" data-ui="overlay">
         {/* Modal Header */}
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#F7F8F6]">
+        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#F7F8F6]" data-ui="ui-frame">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-[#20382F] text-white flex items-center justify-center font-bold text-sm">
               {member.name.split(" ").map((n) => n[0]).join("")}
@@ -131,7 +131,7 @@ export function MemberDetailModal({
           {/* Current Membership Contract Details */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xs font-semibold text-[#1E2922] uppercase tracking-wider flex items-center gap-1.5">
+              <h3 className="text-xs font-semibold text-[#1E2922] font-semibold flex items-center gap-1.5">
                 <CreditCard className="w-4 h-4 text-[#20382F]" />
                 Active Membership Contract
               </h3>
@@ -164,7 +164,7 @@ export function MemberDetailModal({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 text-xs pt-2 border-t border-gray-100">
+                <div className="grid grid-cols-2 gap-3 text-xs pt-2 border-t border-gray-100" data-ui="ui-frame">
                   <div>
                     <span className="text-[#5A6860]">Contract Period:</span>
                     <div className="font-medium text-gray-900 mt-0.5">
@@ -186,7 +186,7 @@ export function MemberDetailModal({
                 )}
 
                 {/* Status Quick Switcher */}
-                <div className="pt-2 border-t border-gray-100 flex items-center justify-between gap-3 text-xs">
+                <div className="pt-2 border-t border-gray-100 flex items-center justify-between gap-3 text-xs" data-ui="ui-frame">
                   <div className="flex items-center gap-2">
                     <span className="text-gray-500 font-medium">Status:</span>
                     <select
@@ -261,7 +261,7 @@ export function MemberDetailModal({
           )}
 
           {/* Footer Actions */}
-          <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
+          <div className="pt-4 border-t border-gray-100 flex items-center justify-between" data-ui="ui-frame">
             <button
               type="button"
               onClick={() => {

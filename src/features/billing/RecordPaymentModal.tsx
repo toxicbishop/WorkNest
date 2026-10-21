@@ -84,9 +84,9 @@ function RecordPaymentInner({
       aria-modal="true"
       aria-labelledby="record-payment-title"
     >
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-md border border-neutral-200 overflow-hidden flex flex-col">
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-md border border-neutral-200 overflow-hidden flex flex-col" data-ui="overlay">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50">
+        <div className="px-6 py-4 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50" data-ui="ui-frame">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center">
               <CreditCard className="w-4 h-4" />
@@ -204,7 +204,7 @@ function RecordPaymentInner({
           </div>
 
           {/* Footer */}
-          <div className="pt-4 border-t border-neutral-100 flex items-center justify-end gap-2">
+          <div className="pt-4 border-t border-neutral-100 flex items-center justify-end gap-2" data-ui="ui-frame">
             <button
               type="button"
               onClick={onClose}
@@ -214,7 +214,7 @@ function RecordPaymentInner({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg transition-colors font-medium flex items-center gap-1.5 shadow-sm"
+              className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg transition-colors font-medium flex items-center gap-1.5 "
             >
               <Check className="w-4 h-4" />
               Confirm Payment

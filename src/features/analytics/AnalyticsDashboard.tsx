@@ -176,13 +176,13 @@ export function AnalyticsDashboard() {
   return (
     <div className="space-y-8">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-6 bg-white rounded-2xl border border-neutral-200 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-6 bg-white rounded-2xl border border-neutral-200 ">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold text-neutral-900">Analytics & Occupancy Cockpit</h1>
             {isLiveApi ? (
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 " />
                 Live FastAPI Data
               </span>
             ) : (
@@ -204,9 +204,9 @@ export function AnalyticsDashboard() {
 
       {/* KPI Top Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div className="p-5 bg-white rounded-2xl border border-neutral-200 shadow-sm">
+        <div className="p-5 bg-white rounded-2xl border border-neutral-200 ">
           <div className="flex items-center justify-between text-neutral-500">
-            <span className="text-xs font-semibold uppercase tracking-wider">Conversion Rate</span>
+            <span className="text-xs font-semibold font-semibold">Conversion Rate</span>
             <TrendingUp className="w-4 h-4 text-emerald-600" />
           </div>
           <p className="text-2xl font-bold text-neutral-900 mt-2">{report.conversion.conversion_rate_percent}%</p>
@@ -215,9 +215,9 @@ export function AnalyticsDashboard() {
           </p>
         </div>
 
-        <div className="p-5 bg-white rounded-2xl border border-neutral-200 shadow-sm">
+        <div className="p-5 bg-white rounded-2xl border border-neutral-200 ">
           <div className="flex items-center justify-between text-neutral-500">
-            <span className="text-xs font-semibold uppercase tracking-wider">Membership Retention</span>
+            <span className="text-xs font-semibold font-semibold">Membership Retention</span>
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
           </div>
           <p className="text-2xl font-bold text-neutral-900 mt-2">{report.revenue.retention_rate_percent}%</p>
@@ -226,18 +226,18 @@ export function AnalyticsDashboard() {
           </p>
         </div>
 
-        <div className="p-5 bg-white rounded-2xl border border-neutral-200 shadow-sm">
+        <div className="p-5 bg-white rounded-2xl border border-neutral-200 ">
           <div className="flex items-center justify-between text-neutral-500">
-            <span className="text-xs font-semibold uppercase tracking-wider">Recognized MRR</span>
+            <span className="text-xs font-semibold font-semibold">Recognized MRR</span>
             <ArrowUpRight className="w-4 h-4 text-[#20382F]" />
           </div>
           <p className="text-2xl font-bold text-neutral-900 mt-2">{formatCurrency(report.revenue.mrr_cents)}</p>
           <p className="text-xs text-neutral-500 mt-1">Contracted recurring run-rate</p>
         </div>
 
-        <div className="p-5 bg-white rounded-2xl border border-neutral-200 shadow-sm">
+        <div className="p-5 bg-white rounded-2xl border border-neutral-200 ">
           <div className="flex items-center justify-between text-neutral-500">
-            <span className="text-xs font-semibold uppercase tracking-wider">Collected Revenue</span>
+            <span className="text-xs font-semibold font-semibold">Collected Revenue</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
           </div>
           <p className="text-2xl font-bold text-neutral-900 mt-2">
@@ -250,7 +250,7 @@ export function AnalyticsDashboard() {
       </div>
 
       {/* Location Occupancy Section */}
-      <div className="p-6 bg-white rounded-2xl border border-neutral-200 shadow-sm">
+      <div className="p-6 bg-white rounded-2xl border border-neutral-200 ">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-lg font-bold text-neutral-900">Location Occupancy & Capacity</h2>
@@ -287,7 +287,7 @@ export function AnalyticsDashboard() {
       {/* Conversion Breakdown & Space Utilization Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Pipeline & Lead Sources */}
-        <div className="p-6 bg-white rounded-2xl border border-neutral-200 shadow-sm">
+        <div className="p-6 bg-white rounded-2xl border border-neutral-200 ">
           <div className="flex items-center justify-between mb-5">
             <div>
               <h2 className="text-lg font-bold text-neutral-900">Inquiry Acquisition Sources</h2>
@@ -314,7 +314,7 @@ export function AnalyticsDashboard() {
             })}
           </div>
 
-          <div className="grid grid-cols-3 gap-3 mt-6 pt-5 border-t border-neutral-100 text-center">
+          <div className="grid grid-cols-3 gap-3 mt-6 pt-5 border-t border-neutral-100 text-center" data-ui="ui-frame">
             <div className="p-2.5 rounded-lg bg-emerald-50">
               <p className="text-xs text-emerald-700 font-medium">Converted</p>
               <p className="text-lg font-bold text-emerald-900 mt-0.5">{report.conversion.converted_leads}</p>
@@ -331,7 +331,7 @@ export function AnalyticsDashboard() {
         </div>
 
         {/* Space Utilization */}
-        <div className="p-6 bg-white rounded-2xl border border-neutral-200 shadow-sm">
+        <div className="p-6 bg-white rounded-2xl border border-neutral-200 ">
           <div className="flex items-center justify-between mb-5">
             <div>
               <h2 className="text-lg font-bold text-neutral-900">Meeting Room & Space Utilization</h2>

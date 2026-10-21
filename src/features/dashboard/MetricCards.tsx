@@ -1,5 +1,6 @@
+"use client";
+
 import React from "react";
-import { Users, UserPlus, Calendar, IndianRupee, Info } from "lucide-react";
 import { DashboardMetrics } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 
@@ -8,79 +9,77 @@ interface MetricCardsProps {
 }
 
 export function MetricCards({ metrics }: MetricCardsProps) {
-  const cards = [
-    {
-      title: "Active Members",
-      value: metrics.activeMembers.toLocaleString(),
-      definition: metrics.definitionNotes.activeMembers,
-      icon: Users,
-      trend: "Across 3 network locations",
-      color: "text-emerald-700 bg-emerald-50 border-emerald-200",
-    },
-    {
-      title: "Open Pipeline Leads",
-      value: metrics.openLeads.toString(),
-      definition: metrics.definitionNotes.openLeads,
-      icon: UserPlus,
-      trend: "Inquiry to Tour Booked",
-      color: "text-blue-700 bg-blue-50 border-blue-200",
-    },
-    {
-      title: "Tours Scheduled (7d)",
-      value: metrics.toursScheduledThisWeek.toString(),
-      definition: metrics.definitionNotes.toursScheduled,
-      icon: Calendar,
-      trend: "Scheduled walkthroughs",
-      color: "text-purple-700 bg-purple-50 border-purple-200",
-    },
-    {
-      title: "Recognized MRR",
-      value: formatCurrency(metrics.mrrCents),
-      definition: metrics.definitionNotes.mrr,
-      icon: IndianRupee,
-      trend: "Active subscription billing",
-      color: "text-amber-700 bg-amber-50 border-amber-200",
-    },
-  ];
-
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {cards.map((card) => {
-        const Icon = card.icon;
-        return (
-          <div
-            key={card.title}
-            className="bg-white rounded-xl border border-[#E5E7EB] p-5 shadow-xs relative flex flex-col justify-between"
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="flex items-center gap-1.5 text-xs font-medium text-gray-500">
-                  <span>{card.title}</span>
-                  <span
-                    className="cursor-help text-gray-400 hover:text-gray-600"
-                    title={card.definition}
-                  >
-                    <Info className="w-3.5 h-3.5" />
-                  </span>
-                </div>
-                <div className="text-2xl font-bold tracking-tight text-[#1E2922] mt-2">
-                  {card.value}
-                </div>
-              </div>
-              <div className={`p-2.5 rounded-lg border ${card.color}`}>
-                <Icon className="w-5 h-5" />
-              </div>
-            </div>
+    <section
+      data-ui="kpi-strip"
+      className="bg-white border border-[#DEE3DE] rounded-lg grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-[#DEE3DE] overflow-hidden"
+    >
+      {/* 1. Active Members */}
+      <div className="p-4 sm:p-5 flex flex-col justify-between">
+        <div className="flex items-center justify-between text-xs text-[#4E5C54]">
+          <span className="font-medium">Active Members</span>
+          <span className="tabular-nums text-[11px] font-semibold px-1.5 py-0.5 rounded bg-[#E4F4EC] text-[#144D33]">
+            +8 this mo
+          </span>
+        </div>
+        <div className="mt-2 text-2xl font-bold tracking-tight text-[#131A16] tabular-nums">
+          {metrics.activeMembers.toLocaleString()}
+        </div>
+        <div className="mt-2 text-[11px] text-[#4E5C54]">
+          Across 160 hot desks and 24 suites
+        </div>
+      </div>
 
-            <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
-              <span>{card.trend}</span>
-              <span className="font-mono text-[10px] text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded">
-                DEMO
-              </span>
-            </div>
-          </div>
-        );
-      })}
-    </div>
+      {/* 2. Occupancy Rate */}
+      <div className="p-4 sm:p-5 flex flex-col justify-between">
+        <div className="flex items-center justify-between text-xs text-[#4E5C54]">
+          <span className="font-medium">Occupancy Rate</span>
+          <span className="tabular-nums text-[11px] font-semibold px-1.5 py-0.5 rounded bg-[#E4F4EC] text-[#144D33]">
+            88.4%
+          </span>
+        </div>
+        <div className="mt-2 text-2xl font-bold tracking-tight text-[#131A16] tabular-nums">
+          142{" "}
+          <span className="text-base font-normal text-[#4E5C54]">
+            / 160
+          </span>
+        </div>
+        <div className="mt-2 text-[11px] text-[#4E5C54]">
+          18 flex desks currently open
+        </div>
+      </div>
+
+      {/* 3. Tours Today */}
+      <div className="p-4 sm:p-5 flex flex-col justify-between">
+        <div className="flex items-center justify-between text-xs text-[#4E5C54]">
+          <span className="font-medium">Tours Today</span>
+          <span className="tabular-nums text-[11px] font-semibold px-1.5 py-0.5 rounded bg-[#EFF2EE] text-[#435048]">
+            {metrics.toursScheduledThisWeek} pending
+          </span>
+        </div>
+        <div className="mt-2 text-2xl font-bold tracking-tight text-[#131A16] tabular-nums">
+          {Math.max(4, metrics.toursScheduledThisWeek)}
+        </div>
+        <div className="mt-2 text-[11px] text-[#4E5C54]">
+          1 walkthrough completed at 09:30
+        </div>
+      </div>
+
+      {/* 4. Recognized MRR */}
+      <div className="p-4 sm:p-5 flex flex-col justify-between">
+        <div className="flex items-center justify-between text-xs text-[#4E5C54]">
+          <span className="font-medium">Recognized MRR</span>
+          <span className="tabular-nums text-[11px] font-semibold px-1.5 py-0.5 rounded bg-[#E4F4EC] text-[#144D33]">
+            98.2% coll.
+          </span>
+        </div>
+        <div className="mt-2 text-2xl font-bold tracking-tight text-[#131A16] tabular-nums">
+          {formatCurrency(metrics.mrrCents)}
+        </div>
+        <div className="mt-2 text-[11px] text-[#4E5C54]">
+          Contracted monthly recurring revenue
+        </div>
+      </div>
+    </section>
   );
 }

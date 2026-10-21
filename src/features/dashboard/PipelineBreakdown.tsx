@@ -17,7 +17,7 @@ const STAGE_ORDER: LeadStatus[] = [
 const STAGE_COLORS: Record<LeadStatus, string> = {
   New: "bg-blue-500",
   Contacted: "bg-amber-500",
-  "Tour Booked": "bg-purple-500",
+  "Tour Booked": "bg-emerald-500",
   Converted: "bg-emerald-500",
   Lost: "bg-rose-500",
 };
@@ -26,7 +26,7 @@ export function PipelineBreakdown({ pipelineCounts }: PipelineBreakdownProps) {
   const total = Object.values(pipelineCounts).reduce((acc, count) => acc + count, 0);
 
   return (
-    <div className="bg-white rounded-xl border border-[#E5E7EB] p-5 shadow-xs">
+    <div className="bg-white rounded-xl border border-[#E5E7EB] p-5 ">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-sm font-semibold text-[#1E2922]">Lead Pipeline Distribution</h3>

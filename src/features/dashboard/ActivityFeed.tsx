@@ -33,7 +33,7 @@ export function ActivityFeed({ activities, onToggleComplete }: ActivityFeedProps
   const currentTimestamp = useCurrentTimestamp();
 
   return (
-    <div className="bg-white rounded-xl border border-[#E5E7EB] p-5 shadow-xs">
+    <div className="bg-white rounded-xl border border-[#E5E7EB] p-5 ">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-sm font-semibold text-[#1E2922]">Follow-ups & Scheduled Tasks</h3>
@@ -46,7 +46,7 @@ export function ActivityFeed({ activities, onToggleComplete }: ActivityFeedProps
         </span>
       </div>
 
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-gray-100" data-ui="ui-list">
         {activities.map((act) => {
           const Icon = activityIcons[act.type] || CheckCircle2;
           const isOverdue =
@@ -68,7 +68,7 @@ export function ActivityFeed({ activities, onToggleComplete }: ActivityFeedProps
                   className={`mt-0.5 w-5 h-5 rounded flex items-center justify-center border transition-colors ${
                     act.completed
                       ? "bg-emerald-600 border-emerald-600 text-white"
-                      : "border-gray-300 hover:border-[#20382F] text-transparent"
+                      : "border-gray-300 hover:border-[#20382F] text-neutral-900"
                   }`}
                   aria-label={act.completed ? "Mark incomplete" : "Mark complete"}
                 >

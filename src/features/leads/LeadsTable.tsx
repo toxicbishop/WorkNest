@@ -99,9 +99,9 @@ export function LeadsTable({
   };
 
   return (
-    <div className="bg-white rounded-xl border border-[#E5E7EB] shadow-xs overflow-hidden">
+    <div className="bg-white rounded-xl border border-[#E5E7EB]  overflow-hidden">
       {/* Search and Filters Header */}
-      <div className="p-4 sm:p-5 border-b border-[#E5E7EB] space-y-3">
+      <div className="p-4 sm:p-5 border-b border-[#E5E7EB] space-y-3" data-ui="ui-frame">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           {/* Search box */}
           <div className="relative flex-1 max-w-md">
@@ -119,7 +119,7 @@ export function LeadsTable({
             <button
               type="button"
               onClick={onOpenNewLead}
-              className="inline-flex items-center gap-1.5 bg-[#20382F] hover:bg-[#172A23] text-white text-xs font-semibold px-3.5 py-2 rounded-lg shadow-xs transition-colors focus:outline-hidden focus:ring-2 focus:ring-[#20382F]"
+              className="inline-flex items-center gap-1.5 bg-[#20382F] hover:bg-[#172A23] text-white text-xs font-semibold px-3.5 py-2 rounded-lg  transition-colors focus:outline-hidden focus:ring-2 focus:ring-[#20382F]"
             >
               <Plus className="w-4 h-4" />
               <span>Add Lead</span>
@@ -186,7 +186,7 @@ export function LeadsTable({
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse" aria-label="Leads list">
             <thead>
-              <tr className="border-b border-gray-200 bg-[#F7F8F6] text-[11px] font-semibold text-gray-600 uppercase tracking-wider">
+              <tr className="border-b border-gray-200 bg-[#F7F8F6] text-[11px] font-semibold text-gray-600 font-semibold" data-ui="ui-frame">
                 <th className="py-3 px-4">
                   <button
                     type="button"
@@ -213,7 +213,7 @@ export function LeadsTable({
                 <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 text-xs text-gray-700">
+            <tbody className="divide-y divide-gray-100 text-xs text-gray-700" data-ui="ui-list">
               {filteredLeads.map((lead) => (
                 <tr key={lead.id} className="hover:bg-gray-50/80 transition-colors">
                   {/* Prospect & Contact */}
@@ -338,7 +338,7 @@ export function LeadsTable({
       )}
 
       {/* Table Footer */}
-      <div className="p-3 bg-[#F7F8F6] border-t border-[#E5E7EB] text-xs text-gray-500 flex items-center justify-between">
+      <div className="p-3 bg-[#F7F8F6] border-t border-[#E5E7EB] text-xs text-gray-500 flex items-center justify-between" data-ui="ui-frame">
         <span>
           Showing <strong>{filteredLeads.length}</strong> of <strong>{leads.length}</strong> leads
         </span>

@@ -121,7 +121,7 @@ export function InvoicesDirectory() {
       case "Open":
         return "bg-blue-50 text-blue-700 border-blue-200";
       case "Partially Paid":
-        return "bg-indigo-50 text-indigo-700 border-indigo-200";
+        return "bg-sky-50 text-sky-700 border-sky-200";
       case "Overdue":
         return "bg-amber-50 text-amber-700 border-amber-200";
       case "Void":
@@ -129,7 +129,7 @@ export function InvoicesDirectory() {
       case "Draft":
         return "bg-neutral-50 text-neutral-600 border-neutral-200";
       case "Refunded":
-        return "bg-purple-50 text-purple-700 border-purple-200";
+        return "bg-emerald-50 text-emerald-700 border-emerald-200";
       default:
         return "bg-neutral-100 text-neutral-700 border-neutral-200";
     }
@@ -204,7 +204,7 @@ export function InvoicesDirectory() {
       </div>
 
       {/* Filter and Control Bar */}
-      <div className="bg-white p-4 rounded-xl border border-neutral-200 shadow-sm flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+      <div className="bg-white p-4 rounded-xl border border-neutral-200  flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
         <div className="flex flex-1 flex-col sm:flex-row gap-3 items-stretch sm:items-center flex-wrap">
           {/* Search Box */}
           <div className="relative flex-1 min-w-[200px]">
@@ -262,7 +262,7 @@ export function InvoicesDirectory() {
                 onClick={() => setPeriodFilter(period)}
                 className={`px-2.5 py-1 rounded-md font-medium transition-all ${
                   periodFilter === period
-                    ? "bg-white text-[#20382F] shadow-xs"
+                    ? "bg-white text-[#20382F] "
                     : "text-neutral-600 hover:text-neutral-900"
                 }`}
               >
@@ -274,7 +274,7 @@ export function InvoicesDirectory() {
 
         <button
           onClick={() => setIsCreateModalOpen(true)}
-          className="flex items-center justify-center gap-1.5 px-4 py-2 bg-[#20382F] hover:bg-[#162720] text-white text-xs font-medium rounded-lg transition-colors shadow-sm shrink-0"
+          className="flex items-center justify-center gap-1.5 px-4 py-2 bg-[#20382F] hover:bg-[#162720] text-white text-xs font-medium rounded-lg transition-colors  shrink-0"
         >
           <Plus className="w-4 h-4" />
           Create Invoice
@@ -282,12 +282,12 @@ export function InvoicesDirectory() {
       </div>
 
       {/* Invoices Table */}
-      <div className="bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-neutral-200  overflow-hidden">
         {filteredInvoices.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="bg-neutral-50/75 border-b border-neutral-200 text-neutral-500 font-medium">
+                <tr className="bg-neutral-50/75 border-b border-neutral-200 text-neutral-500 font-medium" data-ui="ui-frame">
                   <th className="py-3 px-4">Invoice # & Date</th>
                   <th className="py-3 px-4">Billed Member / Client</th>
                   <th className="py-3 px-4">Servicing Hub</th>
@@ -297,7 +297,7 @@ export function InvoicesDirectory() {
                   <th className="py-3 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-100">
+              <tbody className="divide-y divide-neutral-100" data-ui="ui-list">
                 {filteredInvoices.map((inv) => {
                   const balanceRemaining = Math.max(0, inv.totalAmountCents - inv.paidAmountCents);
                   const isOverdue =
@@ -312,7 +312,7 @@ export function InvoicesDirectory() {
                     >
                       {/* Invoice # & Issue Date */}
                       <td className="py-3.5 px-4 whitespace-nowrap">
-                        <div className="font-semibold text-neutral-900 font-mono">
+                        <div className="font-semibold text-neutral-900 tabular-nums">
                           {inv.invoiceNumber}
                         </div>
                         <div className="text-[11px] text-neutral-500 mt-0.5">
@@ -399,7 +399,7 @@ export function InvoicesDirectory() {
                           {balanceRemaining > 0 && inv.status !== "Void" && (
                             <button
                               onClick={() => handleOpenPayment(inv)}
-                              className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded font-medium text-[11px] transition-colors flex items-center gap-1 shadow-xs"
+                              className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded font-medium text-[11px] transition-colors flex items-center gap-1 "
                               title="Record Payment"
                             >
                               <CreditCard className="w-3 h-3" />

@@ -159,7 +159,7 @@ export function LocationsTab({
         {locations.map((loc) => (
           <div
             key={loc.id}
-            className="bg-white border border-[#E5E7EB] rounded-xl p-5 shadow-xs flex flex-col justify-between hover:border-gray-300 transition-all"
+            className="bg-white border border-[#E5E7EB] rounded-xl p-5  flex flex-col justify-between hover:border-gray-300 transition-all"
           >
             <div>
               <div className="flex items-start justify-between gap-3">
@@ -206,7 +206,7 @@ export function LocationsTab({
               </div>
 
               {/* Capacity & Occupancy indicator */}
-              <div className="mt-4 pt-3 border-t border-gray-100">
+              <div className="mt-4 pt-3 border-t border-gray-100" data-ui="ui-frame">
                 <div className="flex items-center justify-between text-xs mb-1">
                   <span className="text-[#5A6860] flex items-center gap-1.5">
                     <Users className="w-3.5 h-3.5" />
@@ -224,7 +224,7 @@ export function LocationsTab({
             </div>
 
             {/* Actions */}
-            <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-end gap-2">
+            <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-end gap-2" data-ui="ui-frame">
               <button
                 type="button"
                 onClick={() => openEditModal(loc)}
@@ -255,8 +255,8 @@ export function LocationsTab({
           aria-modal="true"
           aria-labelledby="location-modal-title"
         >
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full border border-gray-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#F7F8F6]">
+          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full border border-gray-200 overflow-hidden" data-ui="overlay">
+            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#F7F8F6]" data-ui="ui-frame">
               <div className="flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-[#20382F]" />
                 <h3 id="location-modal-title" className="text-sm font-semibold text-[#1E2922]">
@@ -438,7 +438,7 @@ export function LocationsTab({
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-gray-100 flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-gray-100 flex items-center justify-end gap-3" data-ui="ui-frame">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}

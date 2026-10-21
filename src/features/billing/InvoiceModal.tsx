@@ -206,9 +206,9 @@ function InvoiceFormInner({
       aria-modal="true"
       aria-labelledby="invoice-modal-title"
     >
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl border border-neutral-200 overflow-hidden flex flex-col max-h-[92vh]">
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl border border-neutral-200 overflow-hidden flex flex-col max-h-[92vh]" data-ui="overlay">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50">
+        <div className="px-6 py-4 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50" data-ui="ui-frame">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-[#20382F]/10 flex items-center justify-center text-[#20382F]">
               <Receipt className="w-4 h-4" />
@@ -345,7 +345,7 @@ function InvoiceFormInner({
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Acme Corp"
+                    placeholder="e.g. Vance Architecture Ltd"
                     value={customCompany}
                     onChange={(e) => setCustomCompany(e.target.value)}
                     className="w-full px-3 py-2 border border-neutral-200 rounded-lg bg-white"
@@ -417,7 +417,7 @@ function InvoiceFormInner({
             <div className="border border-neutral-200 rounded-lg overflow-hidden">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="bg-neutral-50 border-b border-neutral-200 text-neutral-500 font-medium">
+                  <tr className="bg-neutral-50 border-b border-neutral-200 text-neutral-500 font-medium" data-ui="ui-frame">
                     <th className="py-2 px-3">Description</th>
                     <th className="py-2 px-3 w-20 text-center">Qty</th>
                     <th className="py-2 px-3 w-28 text-right">Rate (₹)</th>
@@ -425,7 +425,7 @@ function InvoiceFormInner({
                     <th className="py-2 px-2 w-10"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-100">
+                <tbody className="divide-y divide-neutral-100" data-ui="ui-list">
                   {lineItems.map((item) => {
                     const rowTotal = (item.quantity || 0) * (item.unitPriceRupees || 0);
                     return (
@@ -512,7 +512,7 @@ function InvoiceFormInner({
                 {formatCurrency(taxAmountCents, "INR")}
               </span>
             </div>
-            <div className="flex justify-between text-sm font-bold text-[#20382F] pt-2 border-t border-neutral-200">
+            <div className="flex justify-between text-sm font-bold text-[#20382F] pt-2 border-t border-neutral-200" data-ui="ui-frame">
               <span>Total Payable:</span>
               <span>{formatCurrency(totalAmountCents, "INR")}</span>
             </div>
@@ -532,7 +532,7 @@ function InvoiceFormInner({
           </div>
 
           {/* Footer */}
-          <div className="pt-4 border-t border-neutral-100 flex items-center justify-end gap-2">
+          <div className="pt-4 border-t border-neutral-100 flex items-center justify-end gap-2" data-ui="ui-frame">
             <button
               type="button"
               onClick={onClose}
@@ -542,7 +542,7 @@ function InvoiceFormInner({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#20382F] hover:bg-[#162720] text-white rounded-lg transition-colors font-medium flex items-center gap-1.5 shadow-sm"
+              className="px-4 py-2 bg-[#20382F] hover:bg-[#162720] text-white rounded-lg transition-colors font-medium flex items-center gap-1.5 "
             >
               <Check className="w-4 h-4" />
               Create Invoice

@@ -130,11 +130,11 @@ export function BookingsDirectory() {
   const getTypeBadge = (type: BookingType) => {
     switch (type) {
       case "Meeting Room":
-        return "bg-indigo-50 text-indigo-700 border-indigo-200";
+        return "bg-sky-50 text-sky-700 border-sky-200";
       case "Prospect Tour":
         return "bg-emerald-50 text-emerald-700 border-emerald-200";
       case "Event":
-        return "bg-purple-50 text-purple-700 border-purple-200";
+        return "bg-emerald-50 text-emerald-700 border-emerald-200";
       case "Desk":
         return "bg-amber-50 text-amber-700 border-amber-200";
       default:
@@ -186,7 +186,7 @@ export function BookingsDirectory() {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white p-4 rounded-xl border border-neutral-200 shadow-sm flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+      <div className="bg-white p-4 rounded-xl border border-neutral-200  flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
         <div className="flex flex-1 flex-col sm:flex-row gap-3 items-stretch sm:items-center flex-wrap">
           {/* Search Box */}
           <div className="relative flex-1 min-w-[200px]">
@@ -259,7 +259,7 @@ export function BookingsDirectory() {
                 onClick={() => setDateFilter(period)}
                 className={`px-2.5 py-1 rounded-md font-medium transition-all ${
                   dateFilter === period
-                    ? "bg-white text-[#20382F] shadow-xs"
+                    ? "bg-white text-[#20382F] "
                     : "text-neutral-600 hover:text-neutral-900"
                 }`}
               >
@@ -271,7 +271,7 @@ export function BookingsDirectory() {
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center justify-center gap-1.5 px-4 py-2 bg-[#20382F] hover:bg-[#162720] text-white text-xs font-medium rounded-lg transition-colors shadow-sm shrink-0"
+          className="flex items-center justify-center gap-1.5 px-4 py-2 bg-[#20382F] hover:bg-[#162720] text-white text-xs font-medium rounded-lg transition-colors  shrink-0"
         >
           <Plus className="w-4 h-4" />
           New Reservation
@@ -279,12 +279,12 @@ export function BookingsDirectory() {
       </div>
 
       {/* Bookings Table / List */}
-      <div className="bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-neutral-200  overflow-hidden">
         {filteredBookings.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="bg-neutral-50/75 border-b border-neutral-200 text-neutral-500 font-medium">
+                <tr className="bg-neutral-50/75 border-b border-neutral-200 text-neutral-500 font-medium" data-ui="ui-frame">
                   <th className="py-3 px-4">Date & Time</th>
                   <th className="py-3 px-4">Space & Location</th>
                   <th className="py-3 px-4">Title & Type</th>
@@ -295,7 +295,7 @@ export function BookingsDirectory() {
                   <th className="py-3 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-100">
+              <tbody className="divide-y divide-neutral-100" data-ui="ui-list">
                 {filteredBookings.map((b) => (
                   <tr key={b.id} className="hover:bg-neutral-50/50 transition-colors">
                     {/* Date & Time */}
@@ -348,7 +348,7 @@ export function BookingsDirectory() {
                       <div className="font-medium text-neutral-900">{b.bookedByName}</div>
                       <div className="text-[11px] text-neutral-500">{b.bookedByEmail}</div>
                       {b.memberId ? (
-                        <span className="inline-block mt-0.5 text-[10px] text-indigo-700 bg-indigo-50 px-1.5 py-0.2 rounded font-medium border border-indigo-100">
+                        <span className="inline-block mt-0.5 text-[10px] text-sky-700 bg-sky-50 px-1.5 py-0.2 rounded font-medium border border-sky-100">
                           Member
                         </span>
                       ) : b.leadId ? (

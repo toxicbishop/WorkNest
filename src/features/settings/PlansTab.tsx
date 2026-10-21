@@ -59,7 +59,7 @@ export function PlansTab({
         {plans.map((plan) => (
           <div
             key={plan.id}
-            className={`bg-white border rounded-xl p-5 shadow-xs flex flex-col justify-between transition-all ${
+            className={`bg-white border rounded-xl p-5  flex flex-col justify-between transition-all ${
               plan.isActive ? "border-[#E5E7EB]" : "border-gray-200 opacity-60 bg-gray-50/50"
             }`}
           >
@@ -67,7 +67,7 @@ export function PlansTab({
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h3 className="text-sm font-semibold text-[#1E2922]">{plan.name}</h3>
-                  <span className="text-[11px] font-mono text-[#5A6860] uppercase">{plan.code}</span>
+                  <span className="text-[11px] tabular-nums text-[#5A6860] uppercase">{plan.code}</span>
                 </div>
                 <span
                   className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium ${
@@ -92,7 +92,7 @@ export function PlansTab({
                 </p>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-gray-100 space-y-1.5 text-xs text-[#5A6860]">
+              <div className="mt-4 pt-3 border-t border-gray-100 space-y-1.5 text-xs text-[#5A6860]" data-ui="ui-frame">
                 <div className="flex items-center justify-between">
                   <span>Meeting Room Credits:</span>
                   <strong className="text-gray-800 font-medium">{plan.meetingRoomCreditsHours} hrs/mo</strong>
@@ -108,7 +108,7 @@ export function PlansTab({
               </div>
             </div>
 
-            <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between">
+            <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between" data-ui="ui-frame">
               <button
                 type="button"
                 onClick={() => onTogglePlanActive(plan.id)}
@@ -141,8 +141,8 @@ export function PlansTab({
           aria-modal="true"
           aria-labelledby="plan-modal-title"
         >
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full border border-gray-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#F7F8F6]">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full border border-gray-200 overflow-hidden" data-ui="overlay">
+            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-[#F7F8F6]" data-ui="ui-frame">
               <div className="flex items-center gap-2">
                 <CreditCard className="w-5 h-5 text-[#20382F]" />
                 <h3 id="plan-modal-title" className="text-sm font-semibold text-[#1E2922]">
@@ -213,7 +213,7 @@ export function PlansTab({
                 />
               </div>
 
-              <div className="pt-4 border-t border-gray-100 flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-gray-100 flex items-center justify-end gap-3" data-ui="ui-frame">
                 <button
                   type="button"
                   onClick={() => setEditingPlan(null)}

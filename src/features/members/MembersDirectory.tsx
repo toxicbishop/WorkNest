@@ -128,7 +128,7 @@ export function MembersDirectory({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by name, company, email, or plan..."
-              className="w-full text-xs pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#20382F] focus:outline-hidden bg-white shadow-2xs"
+              className="w-full text-xs pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#20382F] focus:outline-hidden bg-white "
             />
           </div>
         </div>
@@ -137,7 +137,7 @@ export function MembersDirectory({
           <button
             type="button"
             onClick={() => setIsAddModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#20382F] hover:bg-[#162721] rounded-lg transition-colors shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold text-white bg-[#20382F] hover:bg-[#162721] rounded-lg transition-colors "
           >
             <Plus className="w-4 h-4" />
             <span>Onboard Member</span>
@@ -184,11 +184,11 @@ export function MembersDirectory({
       </div>
 
       {/* Members Table */}
-      <div className="bg-white border border-[#E5E7EB] rounded-xl overflow-hidden shadow-xs">
+      <div className="bg-white border border-[#E5E7EB] rounded-xl overflow-hidden ">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-[#F7F8F6] border-b border-[#E5E7EB] text-[#5A6860] font-medium">
+              <tr className="bg-[#F7F8F6] border-b border-[#E5E7EB] text-[#5A6860] font-medium" data-ui="ui-frame">
                 <th scope="col" className="px-5 py-3.5">Member & Company</th>
                 <th scope="col" className="px-5 py-3.5">Plan & Monthly Fee</th>
                 <th scope="col" className="px-5 py-3.5">Home Branch</th>
@@ -197,7 +197,7 @@ export function MembersDirectory({
                 <th scope="col" className="px-5 py-3.5 text-right">Details</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 text-[#1E2922]">
+            <tbody className="divide-y divide-gray-100 text-[#1E2922]" data-ui="ui-list">
               {filteredMembers.length > 0 ? (
                 filteredMembers.map((member) => {
                   const ms = membershipMap.get(member.id);

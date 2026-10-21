@@ -177,7 +177,7 @@ export function NotificationDropdown() {
       case "lead":
         return <UserPlus className="w-4 h-4 text-emerald-600" />;
       case "renewal":
-        return <Clock className="w-4 h-4 text-purple-600" />;
+        return <Clock className="w-4 h-4 text-teal-700" />;
     }
   };
 
@@ -195,7 +195,7 @@ export function NotificationDropdown() {
           <Bell className="w-5 h-5" />
           {activeNotifications.length > 0 && (
             <span
-              className="absolute -top-1 -right-1.5 min-w-[15px] h-[15px] px-0.5 rounded-full bg-emerald-600 text-white text-[9px] font-bold leading-none flex items-center justify-center ring-2 ring-white pointer-events-none shadow-xs"
+              className="absolute -top-1 -right-1.5 min-w-[15px] h-[15px] px-0.5 rounded-full bg-emerald-600 text-white text-[9px] font-bold leading-none flex items-center justify-center ring-2 ring-white pointer-events-none "
               aria-hidden="true"
             >
               {activeNotifications.length > 99 ? "99+" : activeNotifications.length}
@@ -206,9 +206,9 @@ export function NotificationDropdown() {
 
       {/* Popover Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-xl border border-neutral-200 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-xl border border-neutral-200 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2" data-ui="overlay">
           {/* Header */}
-          <div className="px-4 py-3 bg-neutral-50/80 border-b border-neutral-100 flex items-center justify-between">
+          <div className="px-4 py-3 bg-neutral-50/80 border-b border-neutral-100 flex items-center justify-between" data-ui="ui-frame">
             <div className="flex items-center gap-2">
               <span className="font-semibold text-xs text-[#1E2922]">
                 Notifications & Alerts
@@ -230,7 +230,7 @@ export function NotificationDropdown() {
           </div>
 
           {/* Notifications List */}
-          <div className="max-h-80 overflow-y-auto divide-y divide-neutral-100">
+          <div className="max-h-80 overflow-y-auto divide-y divide-neutral-100" data-ui="ui-list">
             {activeNotifications.length > 0 ? (
               activeNotifications.map((notif) => (
                 <Link
@@ -278,7 +278,7 @@ export function NotificationDropdown() {
           </div>
 
           {/* Footer Link */}
-          <div className="p-2.5 bg-neutral-50/50 border-t border-neutral-100 text-center">
+          <div className="p-2.5 bg-neutral-50/50 border-t border-neutral-100 text-center" data-ui="ui-frame">
             <span className="text-[11px] text-neutral-500">
               WorkNest Automated Operational Alerts
             </span>

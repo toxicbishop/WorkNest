@@ -34,7 +34,7 @@ export function SpaceCard({
       case "Meeting Room":
         return "bg-blue-50 text-blue-700 border-blue-200";
       case "Conference Hall":
-        return "bg-purple-50 text-purple-700 border-purple-200";
+        return "bg-emerald-50 text-emerald-700 border-emerald-200";
       case "Event Space":
         return "bg-amber-50 text-amber-700 border-amber-200";
       case "Podcast Studio":
@@ -45,7 +45,7 @@ export function SpaceCard({
         return "bg-emerald-50 text-emerald-700 border-emerald-200";
       case "Hot Desk Zone":
       case "Dedicated Desk Bay":
-        return "bg-indigo-50 text-indigo-700 border-indigo-200";
+        return "bg-sky-50 text-sky-700 border-sky-200";
       default:
         return "bg-neutral-50 text-neutral-700 border-neutral-200";
     }
@@ -53,7 +53,7 @@ export function SpaceCard({
 
   return (
     <div
-      className={`bg-white rounded-xl border transition-all hover:shadow-md flex flex-col justify-between ${
+      className={`bg-white rounded-xl border transition-all hover: flex flex-col justify-between ${
         space.isActive ? "border-neutral-200" : "border-neutral-200 opacity-75 bg-neutral-50/50"
       }`}
     >
@@ -125,7 +125,7 @@ export function SpaceCard({
         {/* Amenities */}
         {space.amenities && space.amenities.length > 0 && (
           <div className="space-y-1.5 mb-3">
-            <div className="text-[11px] font-medium text-neutral-500 uppercase tracking-wider flex items-center gap-1">
+            <div className="text-[11px] font-medium text-neutral-500 font-semibold flex items-center gap-1">
               <Sparkles className="w-3 h-3 text-neutral-400" />
               Amenities & Equipment
             </div>
@@ -151,7 +151,7 @@ export function SpaceCard({
       </div>
 
       {/* Footer Actions */}
-      <div className="px-5 py-3 border-t border-neutral-100 bg-neutral-50/50 rounded-b-xl flex items-center justify-between text-xs">
+      <div className="px-5 py-3 border-t border-neutral-100 bg-neutral-50/50 rounded-b-xl flex items-center justify-between text-xs" data-ui="ui-frame">
         <button
           onClick={() => onToggleActive(space.id)}
           className={`font-medium transition-colors ${

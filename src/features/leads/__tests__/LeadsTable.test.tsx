@@ -9,7 +9,7 @@ const mockLeads: Lead[] = [
     name: "Jane Smith",
     email: "jane@test.com",
     phone: "123-456-7890",
-    company: "Acme Corp",
+    company: "Vance Architecture Ltd",
     interestedPlan: "Dedicated Desk",
     preferredLocation: "Downtown Hub",
     teamSize: 2,
@@ -21,7 +21,7 @@ const mockLeads: Lead[] = [
   },
   {
     id: "lead-2",
-    name: "John Doe",
+    name: "Jordan Hayes",
     email: "john@startup.io",
     phone: "987-654-3210",
     company: "Startup Co",
@@ -51,8 +51,8 @@ describe("LeadsTable", () => {
     );
 
     expect(screen.getByText("Jane Smith")).toBeInTheDocument();
-    expect(screen.getByText("Acme Corp")).toBeInTheDocument();
-    expect(screen.getByText("John Doe")).toBeInTheDocument();
+    expect(screen.getByText("Vance Architecture Ltd")).toBeInTheDocument();
+    expect(screen.getByText("Jordan Hayes")).toBeInTheDocument();
     expect(screen.getByText("Startup Co")).toBeInTheDocument();
   });
 
@@ -73,7 +73,7 @@ describe("LeadsTable", () => {
     fireEvent.change(searchInput, { target: { value: "Startup" } });
 
     expect(screen.queryByText("Jane Smith")).not.toBeInTheDocument();
-    expect(screen.getByText("John Doe")).toBeInTheDocument();
+    expect(screen.getByText("Jordan Hayes")).toBeInTheDocument();
   });
 
   it("renders empty state when no leads match", () => {

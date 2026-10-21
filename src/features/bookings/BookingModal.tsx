@@ -244,9 +244,9 @@ function BookingFormInner({
       aria-modal="true"
       aria-labelledby="booking-modal-title"
     >
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-xl border border-neutral-200 overflow-hidden flex flex-col max-h-[92vh]">
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-xl border border-neutral-200 overflow-hidden flex flex-col max-h-[92vh]" data-ui="overlay">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50">
+        <div className="px-6 py-4 border-b border-neutral-100 flex items-center justify-between bg-neutral-50/50" data-ui="ui-frame">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-[#20382F]/10 flex items-center justify-center text-[#20382F]">
               <CalendarCheck2 className="w-4 h-4" />
@@ -300,7 +300,7 @@ function BookingFormInner({
                     }}
                     className={`py-2 px-3 rounded-lg border text-xs font-medium text-center transition-all ${
                       bookingType === type
-                        ? "bg-[#20382F] text-white border-[#20382F] shadow-sm"
+                        ? "bg-[#20382F] text-white border-[#20382F] "
                         : "bg-white text-neutral-700 border-neutral-200 hover:bg-neutral-50"
                     }`}
                   >
@@ -613,7 +613,7 @@ function BookingFormInner({
                   <input
                     type="email"
                     required={!isLinkedMember}
-                    placeholder="e.g. rahul@example.com"
+                    placeholder="e.g. rahul@lumina-ai.dev"
                     value={customEmail}
                     onChange={(e) => {
                       setCustomEmail(e.target.value);
@@ -677,7 +677,7 @@ function BookingFormInner({
           </div>
 
           {/* Footer */}
-          <div className="pt-4 border-t border-neutral-100 flex items-center justify-end gap-2">
+          <div className="pt-4 border-t border-neutral-100 flex items-center justify-end gap-2" data-ui="ui-frame">
             <button
               type="button"
               onClick={onClose}
@@ -691,7 +691,7 @@ function BookingFormInner({
               className={`px-4 py-2 rounded-lg transition-colors font-medium flex items-center gap-1.5 ${
                 conflictResult.hasConflict || startTime >= endTime
                   ? "bg-neutral-300 text-neutral-500 cursor-not-allowed"
-                  : "bg-[#20382F] hover:bg-[#162720] text-white shadow-sm"
+                  : "bg-[#20382F] hover:bg-[#162720] text-white "
               }`}
             >
               <CalendarCheck2 className="w-4 h-4" />

@@ -51,7 +51,7 @@ export function OrganizationTab({
       )}
 
       {/* General Information Card */}
-      <div className="bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-xs space-y-4">
+      <div className="bg-white border border-[#E5E7EB] rounded-xl p-6  space-y-4">
         <div>
           <h2 className="text-sm font-semibold text-[#1E2922] flex items-center gap-2">
             <Building className="w-4 h-4 text-[#20382F]" />
@@ -163,7 +163,7 @@ export function OrganizationTab({
       </div>
 
       {/* CRM Lead Automation Policies */}
-      <div className="bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-xs space-y-4">
+      <div className="bg-white border border-[#E5E7EB] rounded-xl p-6  space-y-4">
         <div>
           <h2 className="text-sm font-semibold text-[#1E2922]">
             CRM & Pipeline Automation Rules
@@ -214,7 +214,7 @@ export function OrganizationTab({
       <div className="flex items-center justify-end">
         <button
           type="submit"
-          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium text-white bg-[#20382F] hover:bg-[#162721] rounded-lg transition-colors focus:ring-2 focus:ring-[#20382F] shadow-xs"
+          className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium text-white bg-[#20382F] hover:bg-[#162721] rounded-lg transition-colors focus:ring-2 focus:ring-[#20382F] "
         >
           <Check className="w-4 h-4" />
           Save Organization Settings

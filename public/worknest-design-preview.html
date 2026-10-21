@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WorkNest CRM: Operations Workspace Design Specification</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       WorkNest CRM - Design Tokens
+       Distilled from references/app-screens.md & WorkNest Product Specs
+       Primary: #20382F (Forest Green), Ground: #F7F8F6 (Tactile Linen), Surface: #FFFFFF
+       Zero-Slop Rule: No glow gradients, no tinted card icons, tabular figures
+       ========================================================================== */
+    :root {
+      /* Brand & Data Hues */
+      --brand-forest: #20382F;
+      --brand-forest-hover: #162922;
+      --brand-forest-tint: #EBF2EE;
+      --brand-forest-border: #C8D7CF;
+
+      /* Ground & Surfaces */
+      --ground: #F7F8F6;          /* Linen off-white ground */
+      --surface: #FFFFFF;         /* Crisp opaque cards */
+      --raised: #EFF2EE;          /* Subtle hover wells */
+      --border: #DEE3DE;          /* 1px border */
+      --border-subtle: #E8ECE8;   /* Inner row rules */
+      --border-strong: #C4CCC5;   /* Active controls */
+
+      /* Typography: DM Sans with high contrast ratios (>= 4.5:1) */
+      --text-main: #131A16;       /* High-contrast deep carbon */
+      --text-muted: #435048;      /* Secondary descriptive copy (6.2:1) */
+      --text-faint: #4E5C54;      /* Meta timestamps, unit labels (5.1:1) */
+      --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+      /* Semantic Status - Distinguishable, muted backgrounds, high-contrast text */
+      --status-active-ink: #144D33;
+      --status-active-bg: #E4F4EC;
+      --status-tour-ink: #1B455C;
+      --status-tour-bg: #E6F0F6;
+      --status-pending-ink: #6E3F08;
+      --status-pending-bg: #FAF0DF;
+      --status-alert-ink: #7C1E1E;
+      --status-alert-bg: #FAECEC;
+
+      /* Layout & Metrics */
+      --sidebar-width: 248px;
+      --radius-card: 8px;
+      --radius-control: 6px;
+      --radius-pill: 4px;
+      --control-h: 36px;
+      --row-h: 48px;
+
+      --transition: 140ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--ground);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    button, input, select {
+      font: inherit;
+      color: inherit;
+    }
+
+    .num {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" 1;
+    }
+
+    .app-container {
+      display: grid;
+      grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--ground);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 16px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      user-select: none;
+    }
+
+    .brand-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 8px 18px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      background: var(--brand-forest);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .brand-meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .brand-name {
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+      color: var(--brand-forest);
+    }
+
+    .brand-tag {
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    .location-switcher {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-control);
+      padding: 8px 12px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: border-color var(--transition);
+    }
+
+    .location-switcher:hover {
+      border-color: var(--border-strong);
+    }
+
+    .loc-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-faint);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .loc-current {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .loc-indicator {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--status-active-ink);
+    }
+
+    .nav-group-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-faint);
+      padding: 12px 10px 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: var(--radius-control);
+      color: var(--text-muted);
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color var(--transition), color var(--transition);
+    }
+
+    .nav-item:hover {
+      background: var(--raised);
+      color: var(--text-main);
+    }
+
+    .nav-item.active {
+      background: var(--surface);
+      color: var(--brand-forest);
+      font-weight: 600;
+      border: 1px solid var(--border);
+    }
+
+    .nav-item svg {
+      width: 17px;
+      height: 17px;
+      stroke-width: 1.75;
+      flex-shrink: 0;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 10px;
+      background: var(--raised);
+      color: var(--text-muted);
+    }
+
+    .nav-item.active .nav-badge {
+      background: var(--brand-forest-tint);
+      color: var(--brand-forest);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #D8E3DD;
+      color: var(--brand-forest);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .user-meta {
+      line-height: 1.25;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .user-role {
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    /* Main Workspace Canvas */
+    .canvas {
+      padding: 26px 36px;
+      max-width: 1380px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .canvas-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .canvas-title-group h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--brand-forest);
+      line-height: 1.2;
+    }
+
+    .canvas-title-group p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: var(--control-h);
+      padding: 0 14px;
+      border-radius: var(--radius-control);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color var(--transition), border-color var(--transition), color var(--transition);
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      border-color: var(--border);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--border-strong);
+      background: #FAFAFA;
+    }
+
+    .btn-primary {
+      background: var(--brand-forest);
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background: var(--brand-forest-hover);
+    }
+
+    .btn svg {
+      width: 15px;
+      height: 15px;
+      stroke-width: 2;
+    }
+
+    /* Operational Finding Strip */
+    .finding-strip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--brand-forest);
+      border-radius: var(--radius-card);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      font-size: 13.5px;
+    }
+
+    .finding-text {
+      color: var(--text-main);
+    }
+
+    .finding-text strong {
+      font-weight: 700;
+      color: var(--brand-forest);
+    }
+
+    .finding-meta {
+      font-size: 12.5px;
+      color: var(--text-faint);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    /* KPI Strip */
+    .kpi-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .kpi-cell {
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid var(--border);
+    }
+
+    .kpi-cell:last-child {
+      border-right: none;
+    }
+
+    .kpi-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .kpi-value-row {
+      margin-top: 10px;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--brand-forest);
+      line-height: 1;
+    }
+
+    .kpi-baseline {
+      font-size: 12.5px;
+      color: var(--text-faint);
+      margin-top: 6px;
+    }
+
+    .badge-delta {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .badge-delta.pos {
+      background: var(--status-active-bg);
+      color: var(--status-active-ink);
+    }
+
+    .badge-delta.neu {
+      background: var(--raised);
+      color: var(--text-muted);
+    }
+
+    /* Workspace Grid */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 8fr 4fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .panel-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--brand-forest);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .panel-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    /* Signature Resource Timeline */
+    .timeline-wrapper {
+      margin-top: 6px;
+    }
+
+    .timeline-time-axis {
+      display: grid;
+      grid-template-columns: 150px repeat(8, 1fr);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-faint);
+      text-align: center;
+    }
+
+    .timeline-time-axis span:first-child {
+      text-align: left;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .timeline-resource {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+    }
+
+    .resource-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .resource-type {
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    .timeline-track {
+      position: relative;
+      height: 32px;
+      background: var(--raised);
+      border-radius: 4px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+    }
+
+    .timeline-slot-divider {
+      border-right: 1px dashed var(--border);
+      height: 100%;
+    }
+
+    .booking-block {
+      position: absolute;
+      top: 3px;
+      bottom: 3px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      z-index: 2;
+    }
+
+    /* Primary Data Hue: Forest Green for active session */
+    .booking-block.active-booking {
+      left: 12.5%;
+      width: 25%;
+      background: #20382F;
+      color: #FFFFFF;
+    }
+
+    .booking-block.tour-booking {
+      left: 37.5%;
+      width: 12.5%;
+      background: var(--status-tour-bg);
+      color: var(--status-tour-ink);
+      border: 1px solid #B8D4E5;
+    }
+
+    .booking-block.partner-booking {
+      left: 62.5%;
+      width: 25%;
+      background: #E8F0EB;
+      color: #173827;
+      border: 1px solid var(--brand-forest-border);
+    }
+
+    .booking-block.dedicated-suite {
+      left: 0%;
+      width: 100%;
+      background: #E5E9E5;
+      color: #2F3D35;
+    }
+
+    .timeline-legend {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-top: 14px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    /* Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .data-table th {
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-faint);
+      border-bottom: 1px solid var(--border);
+      background: transparent;
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+
+    .data-table tr:hover td {
+      background: #F9FAF8;
+    }
+
+    .data-table .col-right {
+      text-align: right;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .status-pill.active {
+      background: var(--status-active-bg);
+      color: var(--status-active-ink);
+    }
+
+    .status-pill.tour {
+      background: var(--status-tour-bg);
+      color: var(--status-tour-ink);
+    }
+
+    .status-pill.pending {
+      background: var(--status-pending-bg);
+      color: var(--status-pending-ink);
+    }
+
+    .status-pill.alert {
+      background: var(--status-alert-bg);
+      color: var(--status-alert-ink);
+    }
+
+    .table-subtext {
+      font-size: 12px;
+      color: var(--text-faint);
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* Activity Items */
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .activity-item {
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .act-bullet {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--brand-forest);
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    .act-bullet.tour {
+      background: #1B455C;
+    }
+
+    .act-content {
+      line-height: 1.4;
+      font-size: 13px;
+    }
+
+    .act-title {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .act-meta {
+      font-size: 12px;
+      color: var(--text-faint);
+      margin-top: 2px;
+    }
+
+    .design-token-bar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .swatches-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .swatch-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .swatch-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      border: 1px solid rgba(0,0,0,0.12);
+    }
+
+    @media (max-width: 1024px) {
+      .app-container {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        display: none;
+      }
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+      .kpi-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand-header">
+      <div class="brand-mark">W</div>
+      <div class="brand-meta">
+        <span class="brand-name">WorkNest CRM</span>
+        <span class="brand-tag">Operations Workspace</span>
+      </div>
+    </div>
+
+    <div class="location-switcher" id="locSwitcher" title="Change Campus Scope">
+      <div>
+        <span class="loc-label">Active Campus</span>
+        <span class="loc-current">
+          <span class="loc-indicator"></span>
+          Spitalfields: The Foundry
+        </span>
+      </div>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 9l6 6 6-6"/>
+      </svg>
+    </div>
+
+    <span class="nav-group-title">OPERATIONS</span>
+    <nav class="nav-list">
+      <a class="nav-item active" href="#dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        <span>Overview</span>
+      </a>
+      <a class="nav-item" href="#leads">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        <span>Leads and Tours</span>
+        <span class="nav-badge num">7</span>
+      </a>
+      <a class="nav-item" href="#spaces">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span>Spaces and Inventory</span>
+      </a>
+      <a class="nav-item" href="#bookings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span>Live Schedule</span>
+        <span class="nav-badge num">4 today</span>
+      </a>
+      <a class="nav-item" href="#members">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+          <line x1="9" y1="9" x2="9.01" y2="9"></line>
+          <line x1="15" y1="9" x2="15.01" y2="9"></line>
+        </svg>
+        <span>Members Directory</span>
+        <span class="nav-badge num">284</span>
+      </a>
+      <a class="nav-item" href="#billing">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+          <line x1="2" y1="10" x2="22" y2="10"></line>
+        </svg>
+        <span>Invoices and Billing</span>
+      </a>
+    </nav>
+
+    <span class="nav-group-title" style="margin-top: 14px;">SETTINGS</span>
+    <nav class="nav-list">
+      <a class="nav-item" href="#locations">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path>
+        </svg>
+        <span>Campuses</span>
+      </a>
+      <a class="nav-item" href="#plans">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+        <span>Membership Plans</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-pill">
+        <div class="avatar">ER</div>
+        <div class="user-meta">
+          <div class="user-name">Elena Rostova</div>
+          <div class="user-role">General Manager</div>
+        </div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color: var(--text-faint);">
+        <circle cx="12" cy="12" r="1"></circle>
+        <circle cx="12" cy="5" r="1"></circle>
+        <circle cx="12" cy="19" r="1"></circle>
+      </svg>
+    </div>
+  </aside>
+
+  <!-- Canvas -->
+  <main class="canvas">
+
+    <header class="canvas-header">
+      <div class="canvas-title-group">
+        <h1>Spitalfields Hub: Today's Operations</h1>
+        <p>Real-time workspace capacity, tour walkthroughs, and active prospect conversion.</p>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <span>Schedule Tour</span>
+        </button>
+
+        <button class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>Create Booking</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="finding-strip">
+      <div class="finding-text">
+        <strong>Daily Pulse:</strong> 3 prospect tours scheduled today; Studio 4B lease renewed by Arbor Design Ltd; 2 invoices due for collection.
+      </div>
+      <div class="finding-meta">
+        <span class="num">Updated 10:42 AM</span>
+        <span>·</span>
+        <span>Staff on duty: 4</span>
+      </div>
+    </div>
+
+    <!-- KPI Strip -->
+    <section class="kpi-container" aria-label="Operational Metrics">
+      <div class="kpi-cell">
+        <div class="kpi-label">
+          <span>Active Members</span>
+          <span class="badge-delta pos num">+8 this mo</span>
+        </div>
+        <div class="kpi-value-row">
+          <span class="kpi-value num">284</span>
+        </div>
+        <div class="kpi-baseline">Across 160 hot desks and 24 suites</div>
+      </div>
+
+      <div class="kpi-cell">
+        <div class="kpi-label">
+          <span>Occupancy Rate</span>
+          <span class="badge-delta pos num">88.4%</span>
+        </div>
+        <div class="kpi-value-row">
+          <span class="kpi-value num">142 <span style="font-size: 16px; font-weight: 500; color: var(--text-faint);">/ 160</span></span>
+        </div>
+        <div class="kpi-baseline">18 flex desks currently open</div>
+      </div>
+
+      <div class="kpi-cell">
+        <div class="kpi-label">
+          <span>Tours Today</span>
+          <span class="badge-delta neu num">3 pending</span>
+        </div>
+        <div class="kpi-value-row">
+          <span class="kpi-value num">4</span>
+        </div>
+        <div class="kpi-baseline">1 walkthrough completed at 09:30</div>
+      </div>
+
+      <div class="kpi-cell">
+        <div class="kpi-label">
+          <span>Recognized MRR</span>
+          <span class="badge-delta pos num">98.2% coll.</span>
+        </div>
+        <div class="kpi-value-row">
+          <span class="kpi-value num">$42,850</span>
+        </div>
+        <div class="kpi-baseline">Contracted monthly recurring revenue</div>
+      </div>
+    </section>
+
+    <!-- Workspace Grid -->
+    <div class="workspace-grid">
+      
+      <!-- Left Column -->
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- Live Resource Availability -->
+        <section class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span>Live Resource Availability and Bookings</span>
+              <span class="status-pill active num">Live Timeline</span>
+            </div>
+            <div class="panel-actions">
+              <span class="num" style="color: var(--text-faint);">Wednesday, 21 Oct</span>
+              <button class="btn btn-secondary" style="height: 28px; padding: 0 10px; font-size: 12px;">Filter Spaces</button>
+            </div>
+          </div>
+
+          <div class="timeline-wrapper">
+            <div class="timeline-time-axis">
+              <span>RESOURCE</span>
+              <span>09:00</span>
+              <span>10:00</span>
+              <span>11:00</span>
+              <span>12:00</span>
+              <span>13:00</span>
+              <span>14:00</span>
+              <span>15:00</span>
+              <span>16:00</span>
+            </div>
+
+            <!-- Resource Row 1 -->
+            <div class="timeline-row">
+              <div class="timeline-resource">
+                <span class="resource-name">Boardroom Atlas</span>
+                <span class="resource-type">12p · Video Conf</span>
+              </div>
+              <div class="timeline-track">
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+
+                <!-- Primary Hue Highlight -->
+                <div class="booking-block active-booking" title="Client Strategy Session - Finova Labs">
+                  Finova Labs (Active Strategy)
+                </div>
+                <div class="booking-block partner-booking" style="left: 62.5%; width: 25%;" title="Quarterly Partner Review - Highline Media">
+                  Highline Media (Review)
+                </div>
+              </div>
+            </div>
+
+            <!-- Resource Row 2 -->
+            <div class="timeline-row">
+              <div class="timeline-resource">
+                <span class="resource-name">Glasshouse 01</span>
+                <span class="resource-type">4p · Brainstorm</span>
+              </div>
+              <div class="timeline-track">
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+
+                <div class="booking-block tour-booking" title="Walkthrough Tour - Sorenson and Co">
+                  Tour: Sorenson and Co (6 Desks)
+                </div>
+              </div>
+            </div>
+
+            <!-- Resource Row 3 -->
+            <div class="timeline-row">
+              <div class="timeline-resource">
+                <span class="resource-name">Acoustic Studio</span>
+                <span class="resource-type">Broadcast audio</span>
+              </div>
+              <div class="timeline-track">
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+                <div class="timeline-slot-divider"></div>
+
+                <div class="booking-block active-booking" style="left: 50%; width: 25%;" title="Founder Episode Recording - Venturecast">
+                  Venturecast Ep. 42
+                </div>
+              </div>
+            </div>
+
+            <!-- Resource Row 4 -->
+            <div class="timeline-row">
+              <div class="timeline-resource">
+                <span class="resource-name">Studio 4B</span>
+                <span class="resource-type">8p Dedicated Suite</span>
+              </div>
+              <div class="timeline-track">
+                <div class="booking-block dedicated-suite" title="Dedicated Member Office - Arbor Design Ltd">
+                  Arbor Design Ltd (Active Contract until Nov 2027)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-legend">
+            <div class="legend-item">
+              <span class="legend-swatch" style="background: #20382F;"></span>
+              <span>Active Booking</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-swatch" style="background: #1B455C;"></span>
+              <span>Tour Walkthrough</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-swatch" style="background: #E8F0EB; border: 1px solid #C8D7CF;"></span>
+              <span>Partner Review</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-swatch" style="background: #E5E9E5;"></span>
+              <span>Dedicated Suite</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Pipeline Leads Table -->
+        <section class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span>Inquiry Pipeline and Tours</span>
+              <span class="num" style="font-size: 12px; color: var(--text-faint);">5 open inquiries</span>
+            </div>
+            <div class="panel-actions">
+              <button class="btn btn-secondary" style="height: 28px; padding: 0 10px; font-size: 12px;">View All Pipeline</button>
+            </div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>PROSPECT / COMPANY</th>
+                <th>REQ. TYPE</th>
+                <th>STAGE</th>
+                <th>NEXT ACTION</th>
+                <th class="col-right">ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Marcus Vance</strong>
+                  <span class="table-subtext">Vance Architecture Ltd</span>
+                </td>
+                <td><span class="num">4 Dedicated Desks</span></td>
+                <td><span class="status-pill tour">Tour Booked (12:00)</span></td>
+                <td>Prepare Floorplan B</td>
+                <td class="col-right">
+                  <button class="btn btn-secondary" style="height: 26px; padding: 0 8px; font-size: 12px;">Details</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Sophia Chen</strong>
+                  <span class="table-subtext">Chen and Partners Legal</span>
+                </td>
+                <td><span class="num">Private Office (6p)</span></td>
+                <td><span class="status-pill active">Tour Completed</span></td>
+                <td>Send Proposal ($3,400/mo)</td>
+                <td class="col-right">
+                  <button class="btn btn-primary" style="height: 26px; padding: 0 10px; font-size: 12px;">Convert</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Liam O'Connor</strong>
+                  <span class="table-subtext">Nordic Signal AI</span>
+                </td>
+                <td><span class="num">10 Flex Hot Desks</span></td>
+                <td><span class="status-pill pending">Follow-up Call</span></td>
+                <td>Confirm start date (1 Nov)</td>
+                <td class="col-right">
+                  <button class="btn btn-secondary" style="height: 26px; padding: 0 8px; font-size: 12px;">Log Call</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Amira Patel</strong>
+                  <span class="table-subtext">Apex Media Collective</span>
+                </td>
+                <td><span class="num">Acoustic Suite + 2 Desks</span></td>
+                <td><span class="status-pill tour">Tour Booked (15:30)</span></td>
+                <td>Test broadcast audio rig</td>
+                <td class="col-right">
+                  <button class="btn btn-secondary" style="height: 26px; padding: 0 8px; font-size: 12px;">Details</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+      </div>
+
+      <!-- Right Column -->
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- Today's Schedule -->
+        <section class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span>Scheduled Walkthroughs</span>
+              <span class="num" style="font-size: 12px; color: var(--text-faint);">3 remaining</span>
+            </div>
+          </div>
+
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="act-bullet tour"></div>
+              <div class="act-content">
+                <div class="act-title">Sorenson and Co (6 Desks)</div>
+                <div class="act-meta"><span class="num">12:00 - 12:45</span> · Host: Elena Rostova · Glasshouse 01</div>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="act-bullet tour"></div>
+              <div class="act-content">
+                <div class="act-title">Amira Patel (Acoustic Suite)</div>
+                <div class="act-meta"><span class="num">15:30 - 16:15</span> · Host: James Miller · Studio West</div>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="act-bullet tour"></div>
+              <div class="act-content">
+                <div class="act-title">Kite Mobility (Team 12)</div>
+                <div class="act-meta"><span class="num">16:45 - 17:30</span> · Host: Elena Rostova · Floor 3 Suite</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Billing and Renewals Due -->
+        <section class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span>Billing and Renewals Due</span>
+              <span class="status-pill alert num">2 Due</span>
+            </div>
+          </div>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>MEMBER</th>
+                <th>AMOUNT</th>
+                <th class="col-right">STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Helios Robotics</strong>
+                  <span class="table-subtext">Inv #WN-1048</span>
+                </td>
+                <td class="num">$4,200</td>
+                <td class="col-right"><span class="status-pill alert">Due Today</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Koto Studio</strong>
+                  <span class="table-subtext">Inv #WN-1051</span>
+                </td>
+                <td class="num">$1,850</td>
+                <td class="col-right"><span class="status-pill pending">Pending ACH</span></td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Arbor Design Ltd</strong>
+                  <span class="table-subtext">Contract Renewal</span>
+                </td>
+                <td class="num">$6,400/m</td>
+                <td class="col-right"><span class="status-pill active">Renewed</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Design System Card -->
+        <section class="panel" style="background: var(--raised); border-color: var(--border);">
+          <div class="panel-header" style="border-bottom-color: var(--border);">
+            <div class="panel-title" style="font-size: 13.5px;">
+              <span>System Palette and Tokens</span>
+            </div>
+            <span style="font-size: 11.5px; font-weight: 700; color: var(--brand-forest);">ANTI-SLOP V2</span>
+          </div>
+
+          <div style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5; display: flex; flex-direction: column; gap: 8px;">
+            <div class="swatches-group">
+              <div class="swatch-item">
+                <span class="swatch-color" style="background: #20382F;"></span>
+                <span>#20382F Primary</span>
+              </div>
+              <div class="swatch-item">
+                <span class="swatch-color" style="background: #F7F8F6;"></span>
+                <span>#F7F8F6 Ground</span>
+              </div>
+              <div class="swatch-item">
+                <span class="swatch-color" style="background: #FFFFFF;"></span>
+                <span>#FFFFFF Card</span>
+              </div>
+            </div>
+            <p><strong>Anti-AI Tells Rules Applied:</strong> No glowing gradient buttons, zero card drop-shadows, zero icons in rounded colored boxes, tabular numbers, real authentic coworking entities, and single cohesive brand green.</p>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+  const locSwitcher = document.getElementById('locSwitcher');
+  const locations = [
+    'Spitalfields: The Foundry',
+    'Westminster: Victoria Works',
+    'Canary Wharf: The Docklands',
+    'All Campus Network'
+  ];
+  let curIndex = 0;
+
+  locSwitcher.addEventListener('click', () => {
+    curIndex = (curIndex + 1) % locations.length;
+    locSwitcher.querySelector('.loc-current').innerHTML = `
+      <span class="loc-indicator"></span>
+      ${locations[curIndex]}
+    `;
+  });
+</script>
+
+</body>
+</html>
